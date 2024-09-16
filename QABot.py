@@ -6,10 +6,6 @@ import os
 class QABot:
     QAObjects = []
     IterationTime = 10
-    def __init__(self, GitRepos):
-        for repoName in GitRepos:
-                
-
     def RegisterQA(self,QAObj):
         #Function where you pass a QAObject to register it 
         self.QAObjects.append(QAObj)
