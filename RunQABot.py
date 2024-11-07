@@ -1,8 +1,9 @@
-from QABot import *
-from DummyQA import *
+import QABot
+import DailyQA_Object
 
-DummyQAObj = DummyQA()
+DailyQAObj = DailyQA_Object.DailyQAObj()
 
-QABotObj = QABot()
-QABotObj.RegisterQA(DummyQAObj)
+QABotObj = QABot.QABot()
+QABot.DICOMFolder = "D:\QABot\QA-Bot\WatchFolder"
+QABotObj.RegisterQA(DailyQAObj)
 QABotObj.RunBot()
