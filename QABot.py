@@ -60,7 +60,7 @@ class QABot:
         TEXT+="Error:\n"
 
         TEXT+=str(e)+"\n\n"
-        subject = 'Subject: {}\n\n{}'.format(QAObj.QAName() +" QA: UNSUCCESSFUL", TEXT)
+        subject = QAObj.QAName() +": UNSUCCESSFUL"
         QA_Bot_Helper.SendEmail(TEXT,subject)
         pass      
 

@@ -46,3 +46,4 @@ def UpdateTotalManHours(hours):
     TotalTimeSaved = float(np.load("ManHoursSaved.npy"))
     TotalTimeSaved+=hours
     np.save("ManHoursSaved.npy",TotalTimeSaved)
+
