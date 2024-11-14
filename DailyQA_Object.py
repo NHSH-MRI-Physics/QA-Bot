@@ -2,7 +2,7 @@ import datetime
 import QABot
 import os
 import sys
-sys.path.insert(0, 'DailyQA\DailyQA-main\DQA_Scripts')
+sys.path.insert(0, os.path.join('DailyQA','DailyQA-main','DQA_Scripts'))
 import DailyQA
 import shutil
 import Helper
@@ -22,12 +22,6 @@ class DailyQAObj(QABot.QAObject):
         self.overallpass = []
         self.SNRResult=None
 
-    def RunAnalysis(self, files):
-        print("Running: " + files["QAName"])
-        Results = DailyQA.RunDailyQA(files["folder"])
-        self.QASuccess = True
-        return {"Results": Results}
-
     def FindFiles(self):
         FileCount =  {}
         FileCount["DQA_Head"] = 19
@@ -43,7 +37,13 @@ class DailyQAObj(QABot.QAObject):
                         LoadedDICOM = pydicom.read_file( file )
                         self.scanername =LoadedDICOM[0x08,0x80].value.split(" ")[-2]  + " " + LoadedDICOM[0x08,0x80].value.split(" ")[-1]
                         return {"folder":folder, "QAName":QAName}
-        
+
+
+    def RunAnalysis(self, files):
+        print("Running: " + files["QAName"])
+        Results = DailyQA.RunDailyQA(files["folder"])
+        self.QASuccess = True
+        return {"Results": Results}        
     
     def ReportData(self, files, ResultDict):
         QAName = files["QAName"]

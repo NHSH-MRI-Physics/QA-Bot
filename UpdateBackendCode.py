@@ -4,6 +4,7 @@ import requests, zipfile, io
 import time
 CodeBackEnds = {}
 CodeBackEnds["DailyQA"] = "https://github.com/NHSH-MRI-Physics/DailyQA/archive/refs/heads/main.zip"
+CodeBackEnds["DistortionQA"] = "https://github.com/NHSH-MRI-Physics/Distortion-QA/archive/refs/heads/main.zip"
 
 
 for Name, URL in CodeBackEnds.items():
