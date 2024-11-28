@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import QABot
 import os
 import sys
@@ -12,11 +12,16 @@ import numpy as np
 import glob
 import pydicom
 import gspread
+from scipy.optimize import minimize_scalar
+import os
 
 class DistortionQAObj(QABot.QAObject):
     def __init__(self):
-        self.sequence = ["3D Sag T1 BRAVO Geom Core","3D Sag T1 BRAVO DL"]
+        self.sequence = ["3D Sag T1 BRAVO Geom Core","3D Sag T1 BRAVO DL","3D Sag T1 BRAVO BW=15 Shim off"]
         self.ChosenSequence = None
+        self.ScannerName = None
+        self.ArchiveFolder = None
+
     def FindFiles(self):
         SubFolders = [x[0] for x in os.walk(QABot.DICOMFolder)]
         for folder in SubFolders:
@@ -28,20 +33,71 @@ class DistortionQAObj(QABot.QAObject):
                     return {"folder": folder}
                     
 
+
     def RunAnalysis(self, files):
         ComputeDistortion = Compute_Distortion.DistortionCalculation(files["folder"], self.ChosenSequence) 
-        AnalysisObj = Analysis.AnalysisResults("No_Distortion",ComputeDistortion)
-        ComputeDistortion.GetFudicalSpheres()
-        ComputeDistortion.GetDistances()
-        AnalysisObj.DistortionAnalysis()
-        return {}
+        maxpixel = ComputeDistortion.GetMaxPixel()
+
+        self.Results=None
+
+        def RunDist(thresh,files,ChosenSequence):
+            ComputeDistortion = Compute_Distortion.DistortionCalculation(files["folder"], ChosenSequence) 
+            ComputeDistortion.Threshold = thresh
+            ComputeDistortion.BinariseMethod = "Constant"
+            AnalysisObj = Analysis.AnalysisResults("DistCalc",ComputeDistortion)
+            ComputeDistortion.GetFudicalSpheres()
+            ComputeDistortion.GetDistances()
+            AnalysisObj.DistortionAnalysis()
+            #AnalysisObj.PrintToScreen()
+            self.Results=AnalysisObj.Results
+            self.ScannerName = ComputeDistortion.Scanner
+            return ComputeDistortion.ErrorMetric
+
+        res = minimize_scalar(lambda thresh: RunDist(thresh,files,self.ChosenSequence),bounds=(maxpixel*0.1,maxpixel*0.5),options = {"disp": 2,"xatol": 10,"maxiter":50})
+        if res.fun==0:
+            return self.Results
+        else:
+            raise Exception("Error: The optimisation algorthim could not find a sutible threshold, consider running the data manually")
     
     def ReportData(self, files, ResultDict):
-        pass
+        #print(ResultDict)
+        images = glob.glob("DistCalc_*.png")
+        subject = "Distortion QA Results: " + self.ScannerName  
+
+        TEXT = ""
+        TEXT+= "Max Interplate Distortion: " + str(round(ResultDict["Interplate Max Distortion"][0],2)) +"mm \n"
+        TEXT+= "Max Intraplate Distortion: " + str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)) +" mm" +"\n"
+        QA_Bot_Helper.SendEmail(TEXT,subject,images)
+
+        gc = gspread.service_account(filename="qaproject-441416-f5fec0c61099.json")
+        sh = gc.open("QA Record")
+        values_list = sh.worksheet("DistortionQA").col_values(1)
+        LastRow = len(values_list)+1
+
+        Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
+        self.ArchiveFolder = os.path.join("Archive","DistortionQA_"+self.ScannerName+"_"+Date)
+        #self.ArchiveFolder = self.ArchiveFolder.replace("Users", QAName)
+
+
+        Values = []
+        Values.append(Date)
+        Values.append(self.ScannerName)
+        Values.append(str(round(ResultDict["Interplate Max Distortion"][0],2)))
+
+        print(round(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)))
+        Values.append(str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)))
+        sh.worksheet("DistortionQA").update( [Values],"A"+str(LastRow))
+
+        QA_Bot_Helper.UpdateTotalManHours(5.12)
 
     def CleanUpFiles(self, files, ResultDict):
-        pass
+        folder = files["folder"]
+        os.system("echo ilovege | sudo -S chown mri "+folder)
+        os.rename(folder, self.ArchiveFolder)
+
+        images = glob.glob("DistCalc_*.png")
+        for image in images:
+            os.rename(image,os.path.join(self.ArchiveFolder,image))
 
     def QAName(self):
         return "Distortion QA"
-    
