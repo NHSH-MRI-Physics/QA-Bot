@@ -53,7 +53,7 @@ class DistortionQAObj(QABot.QAObject):
             self.ScannerName = ComputeDistortion.Scanner
             return ComputeDistortion.ErrorMetric
 
-        res = minimize_scalar(lambda thresh: RunDist(thresh,files,self.ChosenSequence),bounds=(maxpixel*0.1,maxpixel*0.5),options = {"disp": 2,"xatol": 10,"maxiter":50})
+        res = minimize_scalar(lambda thresh: RunDist(thresh,files,self.ChosenSequence),bounds=(maxpixel*0.1,maxpixel*0.5),options = {"disp": 3,"xatol": 10,"maxiter":50})
         if res.fun==0:
             return self.Results
         else:
@@ -83,8 +83,6 @@ class DistortionQAObj(QABot.QAObject):
         Values.append(Date)
         Values.append(self.ScannerName)
         Values.append(str(round(ResultDict["Interplate Max Distortion"][0],2)))
-
-        print(round(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)))
         Values.append(str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)))
         sh.worksheet("DistortionQA").update( [Values],"A"+str(LastRow))
 
