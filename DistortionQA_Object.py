@@ -67,18 +67,16 @@ class DistortionQAObj(QABot.QAObject):
         TEXT = ""
         TEXT+= "Max Interplate Distortion: " + str(round(ResultDict["Interplate Max Distortion"][0],2)) +"mm \n"
         TEXT+= "Max Intraplate Distortion: " + str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)) +" mm" +"\n"
+        Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
+        self.ArchiveFolder = os.path.join("Archive","DistortionQA_"+self.ScannerName+"_"+Date)
+        TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
         QA_Bot_Helper.SendEmail(TEXT,subject,images)
 
         gc = gspread.service_account(filename="qaproject-441416-f5fec0c61099.json")
         sh = gc.open("QA Record")
         values_list = sh.worksheet("DistortionQA").col_values(1)
         LastRow = len(values_list)+1
-
-        Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
-        self.ArchiveFolder = os.path.join("Archive","DistortionQA_"+self.ScannerName+"_"+Date)
-        #self.ArchiveFolder = self.ArchiveFolder.replace("Users", QAName)
-
-
+        
         Values = []
         Values.append(Date)
         Values.append(self.ScannerName)

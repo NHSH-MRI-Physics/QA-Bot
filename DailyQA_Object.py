@@ -82,7 +82,6 @@ class DailyQAObj(QABot.QAObject):
             NumberOfFilesLastRun = int(np.load("temp.npy"))
             TimePerImage = 0.028
             QA_Bot_Helper.UpdateTotalManHours(TimePerImage*NumberOfFilesLastRun)
-            TEXT+="Estimated Total Man Hours Saved: " + str( round(QA_Bot_Helper.GetTotalManHoursSaved(),2)) + " hours\n\n"
             TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
             QA_Bot_Helper.SendEmail(TEXT,subject,images)
 

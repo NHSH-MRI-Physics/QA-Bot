@@ -3,6 +3,7 @@ import smtplib
 import randfacts
 import numpy as np
 import os 
+import QA_Bot_Helper
 
 def SendEmail(TextBody,subject,AttachmentImages=None):
     UserName = "raigmoremri@gmail.com"
@@ -21,7 +22,8 @@ def SendEmail(TextBody,subject,AttachmentImages=None):
         TEXT = "Hi " + name + "\n\n"
         TEXT +=TextBody
         TEXT+= "\n\n\nRandom Fact: " + randfacts.get_fact()  
-        TEXT +="\nThis is a automated email from the QA Bot framework."
+        TEXT +="\nThis is a automated email from the QA Bot framework.\n\n"
+        TEXT+="Estimated Total Man Hours Saved: " + str( round(QA_Bot_Helper.GetTotalManHoursSaved(),2)) + " hours\n\n"
 
         msg.set_content(TEXT)
         msg['Subject'] = subject
