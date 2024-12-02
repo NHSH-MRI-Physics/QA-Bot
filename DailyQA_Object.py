@@ -111,6 +111,33 @@ class DailyQAObj(QABot.QAObject):
                         Values.append(self.SNRResult[i][1][ROIS[j]][k])
                 sh.worksheet("DailyQA").update( [Values],"A"+str(LastRow))
 
+
+                
+                f = open("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",'w')
+                f.write("Date: "+str(self.date.strftime("%Y-%m-%d %H-%M-%S")) + "\n")
+                f.write(QAName+"\n")
+                f.write("Overall Result: ")
+                if self.QAResult[i][0] == True:
+                    f.write("Pass"+"\n")
+                else:
+                    f.write("Fail"+"\n")
+                f.write("Scanner: " + self.scanername+"\n")
+                f.write("Archive Folder: " + self.ArchiveFolder+"\n")
+                f.write("\n\n")
+                for sequenceID in range(len(self.SNRResult)):
+                    f.write("\tSequence: " + self.SNRResult[sequenceID][3] + "\n")
+                    for SliceNum in range(len(self.SNRResult[sequenceID][1]["M1"])):
+                        f.write("\tSlice Number: " + str(SliceNum+1) + "\n")
+                        f.write("\t\tM1: " + str(self.SNRResult[sequenceID][1]["M1"][SliceNum]) + "\n")
+                        f.write("\t\tM2: " + str(self.SNRResult[sequenceID][1]["M2"][SliceNum]) + "\n")
+                        f.write("\t\tM3: " + str(self.SNRResult[sequenceID][1]["M3"][SliceNum]) + "\n")
+                        f.write("\t\tM4: " + str(self.SNRResult[sequenceID][1]["M4"][SliceNum]) + "\n")
+                        f.write("\t\tM5: " + str(self.SNRResult[sequenceID][1]["M5"][SliceNum]) + "\n")
+                        f.write("\n")
+                    f.write("\n\n")
+                f.close()
+
+
     def CleanUpFiles(self, files, ResultDict):
         #Archive all the files
         folder = files["folder"]
@@ -121,6 +148,7 @@ class DailyQAObj(QABot.QAObject):
         #Move to the archive 
         os.system("echo ilovege | sudo -S chown mri "+folder)
         os.rename(folder, self.ArchiveFolder)
+        os.rename("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
         if (self.QASuccess==True):
             for result in Results:
                 shutil.copyfile(os.path.join("DailyQA","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"), os.path.join(self.ArchiveFolder,result[-1]+"_SmoothMethod.png"))

@@ -21,6 +21,7 @@ class DistortionQAObj(QABot.QAObject):
         self.ChosenSequence = None
         self.ScannerName = None
         self.ArchiveFolder = None
+        self.Date=None
 
     def FindFiles(self):
         SubFolders = [x[0] for x in os.walk(QABot.DICOMFolder)]
@@ -67,8 +68,8 @@ class DistortionQAObj(QABot.QAObject):
         TEXT = ""
         TEXT+= "Max Interplate Distortion: " + str(round(ResultDict["Interplate Max Distortion"][0],2)) +"mm \n"
         TEXT+= "Max Intraplate Distortion: " + str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)) +" mm" +"\n"
-        Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
-        self.ArchiveFolder = os.path.join("Archive","DistortionQA_"+self.ScannerName+"_"+Date)
+        self.Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
+        self.ArchiveFolder = os.path.join("Archive","DistortionQA_"+self.ScannerName+"_"+self.Date)
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
         QA_Bot_Helper.SendEmail(TEXT,subject,images)
 
@@ -78,19 +79,24 @@ class DistortionQAObj(QABot.QAObject):
         LastRow = len(values_list)+1
         
         Values = []
-        Values.append(Date)
+        Values.append(self.Date)
         Values.append(self.ScannerName)
         Values.append(str(round(ResultDict["Interplate Max Distortion"][0],2)))
         Values.append(str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)))
         sh.worksheet("DistortionQA").update( [Values],"A"+str(LastRow))
 
+        f = open("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",'w')
+        f.write("Date: "+str(self.Date.strftime("%Y-%m-%d %H-%M-%S")) + "\n")
+        f.write("Scanner :" + self.ScannerName + "\n")
+        f.write("Interplate Max Distortion " + str(round(ResultDict["Interplate Max Distortion"][0],2)) + "\n")
+        f.write((str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2))) + "\n")
         QA_Bot_Helper.UpdateTotalManHours(5.12)
 
     def CleanUpFiles(self, files, ResultDict):
         folder = files["folder"]
         os.system("echo ilovege | sudo -S chown mri "+folder)
         os.rename(folder, self.ArchiveFolder)
-
+        os.rename("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",os.path.join(self.ArchiveFolder,"DistortionQA_"+self.ScannerName+"_"+self.Date+".txt"))
         images = glob.glob("DistCalc_*.png")
         for image in images:
             os.rename(image,os.path.join(self.ArchiveFolder,image))
