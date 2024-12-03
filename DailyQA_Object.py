@@ -86,10 +86,6 @@ class DailyQAObj(QABot.QAObject):
             QA_Bot_Helper.SendEmail(TEXT,subject,images)
 
             #Fill out spreadsheet
-            gc = gspread.service_account(filename="qaproject-441416-f5fec0c61099.json")
-            sh = gc.open("QA Record")
-
-
             for i in range(len(self.QAResult)):
                 values_list = sh.worksheet("DailyQA").col_values(1)
                 LastRow = len(values_list)+1
@@ -109,9 +105,7 @@ class DailyQAObj(QABot.QAObject):
                 for j in range(5): 
                     for k in range(len(self.SNRResult[i][1]["M1"])):
                         Values.append(self.SNRResult[i][1][ROIS[j]][k])
-                sh.worksheet("DailyQA").update( [Values],"A"+str(LastRow))
-
-
+                QA_Bot_Helper.UpdateGoogleSheet("DailyQA",LastRow)
                 
                 f = open("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",'w')
                 f.write("Date: "+str(self.date.strftime("%Y-%m-%d %H-%M-%S")) + "\n")

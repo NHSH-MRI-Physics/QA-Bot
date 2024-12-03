@@ -4,8 +4,17 @@ import randfacts
 import numpy as np
 import os 
 import QA_Bot_Helper
+import QABot
+import gspread
 
 def SendEmail(TextBody,subject,AttachmentImages=None):
+    if QABot.SendEmails == False:
+        print("Emails are disabled, email text shown below")
+        print("")
+        print("subject:" + str(subject))
+        print(TextBody)
+        return
+
     UserName = "raigmoremri@gmail.com"
     file = open('Password.txt',mode='r')
     Password = file.read()
@@ -21,7 +30,7 @@ def SendEmail(TextBody,subject,AttachmentImages=None):
 
         TEXT = "Hi " + name + "\n\n"
         TEXT +=TextBody
-        TEXT+= "\n\n\nRandom Fact: " + randfacts.get_fact()  
+        TEXT+= "\n\n\nRandom Fact: " + randfacts.get_fact()  +"\n"
         TEXT +="\nThis is a automated email from the QA Bot framework.\n\n"
         TEXT+="Estimated Total Man Hours Saved: " + str( round(QA_Bot_Helper.GetTotalManHoursSaved(),2)) + " hours\n\n"
 
@@ -49,3 +58,13 @@ def UpdateTotalManHours(hours):
     TotalTimeSaved+=hours
     np.save("ManHoursSaved.npy",TotalTimeSaved)
 
+
+def UpdateGoogleSheet(Sheet,Values):
+    if QABot.UpdateGoogleSheet == False:
+        print("Google Sheets updating is disabled")
+        return
+    gc = gspread.service_account(filename=QABot.GoogleSheetJSON)
+    sh = gc.open(QABot.WorkbookName)
+    values_list = sh.worksheet("Sheet").col_values(1)
+    LastRow = len(values_list)+1
+    sh.worksheet("DistortionQA").update( [Values],"A"+str(LastRow))

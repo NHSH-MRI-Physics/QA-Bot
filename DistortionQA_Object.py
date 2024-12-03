@@ -72,24 +72,19 @@ class DistortionQAObj(QABot.QAObject):
         self.ArchiveFolder = os.path.join("Archive","DistortionQA_"+self.ScannerName+"_"+self.Date)
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
         QA_Bot_Helper.SendEmail(TEXT,subject,images)
-
-        gc = gspread.service_account(filename="qaproject-441416-f5fec0c61099.json")
-        sh = gc.open("QA Record")
-        values_list = sh.worksheet("DistortionQA").col_values(1)
-        LastRow = len(values_list)+1
         
         Values = []
         Values.append(self.Date)
         Values.append(self.ScannerName)
         Values.append(str(round(ResultDict["Interplate Max Distortion"][0],2)))
         Values.append(str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)))
-        sh.worksheet("DistortionQA").update( [Values],"A"+str(LastRow))
+        QA_Bot_Helper.UpdateGoogleSheet("DistortionQA",Values)
 
         f = open("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",'w')
-        f.write("Date: "+str(self.Date.strftime("%Y-%m-%d %H-%M-%S")) + "\n")
-        f.write("Scanner :" + self.ScannerName + "\n")
-        f.write("Interplate Max Distortion " + str(round(ResultDict["Interplate Max Distortion"][0],2)) + "\n")
-        f.write((str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2))) + "\n")
+        f.write("Date: "+str(self.Date) + "\n")
+        f.write("Scanner: " + self.ScannerName + "\n")
+        f.write("Interplate Max Distortion " + str(round(ResultDict["Interplate Max Distortion"][0],2)) + "mm\n")
+        f.write("Intraplate Max Distortion " + (str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2))) + "mm\n")
         QA_Bot_Helper.UpdateTotalManHours(5.12)
 
     def CleanUpFiles(self, files, ResultDict):

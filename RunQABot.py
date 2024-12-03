@@ -7,7 +7,9 @@ DistortionQAObj = DistortionQA_Object.DistortionQAObj()
 
 QABotObj = QABot.QABot()
 QABotObj.IterationTime=10
-QABot.DICOMFolder = "D:\QABot\QA-Bot\WatchFolder"
+QABot.DICOMFolder = "WatchFolder"
+QABot.SendEmails=False
+QABot.UpdateGoogleSheet=False
 QABotObj.RegisterQA(DailyQAObj)
 QABotObj.RegisterQA(DistortionQAObj)
 QABotObj.RunBot()

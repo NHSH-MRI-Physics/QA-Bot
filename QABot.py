@@ -6,11 +6,21 @@ import sys
 import QA_Bot_Helper
 
 DICOMFolder = "/Users/mri/Documents/QA/ClinicalQA/RawDICOM"
+SendEmails=True
+
+#Google sheet settings
+UpdateGoogleSheet=True
+GoogleSheetJSON = "qaproject-441416-f5fec0c61099.json"
+WorkbookName = "QA Record"
+
 class QABot:
     def __init__(self):
         self.QAObjects = []
         self.IterationTime = 10
         self.DownloadSafeTime = 1
+
+        if not os.path.exists("Archive"):
+            os.makedirs("Archive")
 
     def RegisterQA(self,QAObj):
         #Function where you pass a QAObject to register it 
