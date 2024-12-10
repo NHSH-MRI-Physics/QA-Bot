@@ -36,7 +36,7 @@
             "children": [
                 {
                     "attrib": {
-                        "value": "516x293+0+0"
+                        "value": "516x291+0+0"
                     }, 
                     "type": "arg"
                 }
@@ -65,6 +65,7 @@
                     "activebackground": "#2f60d8", 
                     "activeforeground": "#ffffff", 
                     "background": "#1c1c1c", 
+                    "command": "StartQA()", 
                     "disabledforeground": "#535353", 
                     "foreground": "#fafafa", 
                     "highlightbackground": "#1c1c1c", 
@@ -184,6 +185,7 @@
                     "foreground": "#fafafa", 
                     "highlightbackground": "#1c1c1c", 
                     "highlightcolor": "#2f60d8", 
+                    "takefocus": 0, 
                     "text": "Daily QA", 
                     "variable": "!checkbutton"
                 }, 

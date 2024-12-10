@@ -21,6 +21,7 @@ class QABot:
         self.IterationTime = 10
         self.DownloadSafeTime = 1
         self.BackupTimer = 0
+        self.running=True
 
         if not os.path.exists("Archive"):
             os.makedirs("Archive")
@@ -35,7 +36,7 @@ class QABot:
         #After the file has be ran call the QA Objects function to do whatever you want with the results 
         #We will have two versionfo the QA Bot one that runs from a streamlit interface and one that is just command line
 
-        while True:
+        while self.running:
             print ("QA Bot Still alive at " + str(datetime.datetime.now()))
             filesDict = None
             for QAObj in self.QAObjects:
@@ -83,6 +84,8 @@ class QABot:
                 
                 if DoBackUp==True:
                     QA_Bot_Helper.BackUpGoogleSheet()
+
+        print ("QA Bot Succesfully Stopped")
 
     
     def ShowError(self,e,CustomMessage,QAObj):
