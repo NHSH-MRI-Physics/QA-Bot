@@ -87,8 +87,6 @@ class DailyQAObj(QABot.QAObject):
 
             #Fill out spreadsheet
             for i in range(len(self.QAResult)):
-                values_list = sh.worksheet("DailyQA").col_values(1)
-                LastRow = len(values_list)+1
                 Values = []
                 Values.append(str(self.date.strftime("%Y-%m-%d %H-%M-%S")))
                 Values.append(QAName)
@@ -105,7 +103,7 @@ class DailyQAObj(QABot.QAObject):
                 for j in range(5): 
                     for k in range(len(self.SNRResult[i][1]["M1"])):
                         Values.append(self.SNRResult[i][1][ROIS[j]][k])
-                QA_Bot_Helper.UpdateGoogleSheet("DailyQA",LastRow)
+                QA_Bot_Helper.UpdateGoogleSheet("DailyQA",Values)
                 
                 f = open("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",'w')
                 f.write("Date: "+str(self.date.strftime("%Y-%m-%d %H-%M-%S")) + "\n")

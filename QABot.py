@@ -4,20 +4,23 @@ import time
 import os 
 import sys
 import QA_Bot_Helper
+import glob
+from pathlib import Path
 
+#These global variables are the settings, it could probably be done alot better
 DICOMFolder = "/Users/mri/Documents/QA/ClinicalQA/RawDICOM"
 SendEmails=True
-
-#Google sheet settings
 UpdateGoogleSheet=True
 GoogleSheetJSON = "qaproject-441416-f5fec0c61099.json"
 WorkbookName = "QA Record"
+BackUpTime=24
 
 class QABot:
     def __init__(self):
         self.QAObjects = []
         self.IterationTime = 10
         self.DownloadSafeTime = 1
+        self.BackupTimer = 0
 
         if not os.path.exists("Archive"):
             os.makedirs("Archive")
@@ -31,9 +34,10 @@ class QABot:
         #If a file is found call the function in QA object that runs the script 
         #After the file has be ran call the QA Objects function to do whatever you want with the results 
         #We will have two versionfo the QA Bot one that runs from a streamlit interface and one that is just command line
-        
+
         while True:
             print ("QA Bot Still alive at " + str(datetime.datetime.now()))
+            filesDict = None
             for QAObj in self.QAObjects:
                 try:
                     filesDict = QAObj.FindFiles()
@@ -59,18 +63,47 @@ class QABot:
                         self.ShowError(e,"Clean Up Files",QAObj)
                 
                 time.sleep(self.IterationTime)
+
+                DoBackUp=False
+                if not os.path.exists("Sheets_Backup"):
+                    DoBackUp=True
+                else:
+                    files = glob.glob(os.path.join("Sheets_Backup",'*.csv'))
+                    if len(files) == 0:
+                        DoBackUp=True
+                    else:
+                        dates = []
+                        for file in files:
+                            date = file.split()[2].split("-")
+                            dates.append( datetime.datetime( int(date[0]), int(date[1]), int(date[2])) )
+                        dates = sorted(dates)
+                        latestdate = dates[-1]
+                        if datetime.datetime.now() > latestdate+datetime.timedelta(days=1):
+                            DoBackUp=True
+                
+                if DoBackUp==True:
+                    QA_Bot_Helper.BackUpGoogleSheet()
+
     
     def ShowError(self,e,CustomMessage,QAObj):
         print("         Error: " + CustomMessage)
         ErrorMessage=e
         import traceback
         traceback.print_exc()
+        
         TEXT=""
-        TEXT+= QAObj.QAName() + " was not able to be processed, this may be due to a set up error \n\n"
+        TEXT+= QAObj.QAName() + " caused an error during processing, the error is displayed below \n\n"
         TEXT+="Error:\n"
 
         TEXT+=str(e)+"\n\n"
-        subject = QAObj.QAName() +": UNSUCCESSFUL"
+        subject = QAObj.QAName() +": ERROR"
+
+        Path('ErrorLog.txt').touch(exist_ok=True)
+        f = open("ErrorLog.txt", "a")
+        f.write("Error logged at " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") +"\n")
+        f.write(traceback.format_exc())
+        f.write("\n\n")
+
         QA_Bot_Helper.SendEmail(TEXT,subject)
         pass      
 

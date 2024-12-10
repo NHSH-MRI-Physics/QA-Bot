@@ -1,0 +1,313 @@
+{
+    "attrib": {
+        "attr": {
+            "background": "#1c1c1c", 
+            "highlightbackground": "#1c1c1c", 
+            "highlightcolor": "#2f60d8", 
+            "layout": "place"
+        }, 
+        "layout": {
+            "height": 324, 
+            "width": 516, 
+            "x": 30, 
+            "y": 30
+        }, 
+        "name": "tk_1"
+    }, 
+    "children": [
+        {
+            "attrib": {
+                "name": "title"
+            }, 
+            "children": [
+                {
+                    "attrib": {
+                        "value": "QA Bot"
+                    }, 
+                    "type": "arg"
+                }
+            ], 
+            "type": "meth"
+        }, 
+        {
+            "attrib": {
+                "name": "geometry"
+            }, 
+            "children": [
+                {
+                    "attrib": {
+                        "value": "516x293+0+0"
+                    }, 
+                    "type": "arg"
+                }
+            ], 
+            "type": "meth"
+        }, 
+        {
+            "attrib": {
+                "major": "8", 
+                "minor": "0", 
+                "name": "version"
+            }, 
+            "type": "meta"
+        }, 
+        {
+            "attrib": {
+                "name": "theme", 
+                "sub_theme": "dark", 
+                "theme": "sun-valley"
+            }, 
+            "type": "meta"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Start QA Bot"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "80", 
+                    "x": 25, 
+                    "y": 18
+                }, 
+                "name": "StartQABot"
+            }, 
+            "type": "tkinter.Button"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Stop QA Bot"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "80", 
+                    "x": 25, 
+                    "y": 51
+                }, 
+                "name": "Stop_QA"
+            }, 
+            "type": "tkinter.Button"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "background": "#1c1c1c", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "insertbackground": "#fafafa", 
+                    "selectbackground": "#2f60d8", 
+                    "selectforeground": "#ffffff"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "150", 
+                    "width": "455", 
+                    "x": 27, 
+                    "y": 131
+                }, 
+                "name": "Text_Log"
+            }, 
+            "type": "tkinter.Text"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Modules"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "71", 
+                    "x": 132, 
+                    "y": 6
+                }, 
+                "name": "label_1"
+            }, 
+            "type": "tkinter.Label"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Options"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "71", 
+                    "x": 301, 
+                    "y": 6
+                }, 
+                "name": "label_2"
+            }, 
+            "type": "tkinter.Label"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "anchor": "w", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Daily QA", 
+                    "variable": "!checkbutton"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "96", 
+                    "x": 140, 
+                    "y": 27
+                }, 
+                "name": "DailyQACheck"
+            }, 
+            "type": "tkinter.Checkbutton"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "anchor": "w", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Distortion QA", 
+                    "variable": "!checkbutton3"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "96", 
+                    "x": 140, 
+                    "y": 54
+                }, 
+                "name": "DistortionQACheck"
+            }, 
+            "type": "tkinter.Checkbutton"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Enable Emails Reports", 
+                    "variable": "!checkbutton4"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "138", 
+                    "x": 317, 
+                    "y": 26
+                }, 
+                "name": "EnableEmails"
+            }, 
+            "type": "tkinter.Checkbutton"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Enable Google Sheets", 
+                    "variable": "!checkbutton4"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "138", 
+                    "x": 316, 
+                    "y": 51
+                }, 
+                "name": "EnableGoogleSheets"
+            }, 
+            "type": "tkinter.Checkbutton"
+        }, 
+        {
+            "attrib": {
+                "attr": {
+                    "activebackground": "#2f60d8", 
+                    "activeforeground": "#ffffff", 
+                    "background": "#1c1c1c", 
+                    "disabledforeground": "#535353", 
+                    "foreground": "#fafafa", 
+                    "highlightbackground": "#1c1c1c", 
+                    "highlightcolor": "#2f60d8", 
+                    "text": "Log"
+                }, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "25", 
+                    "width": "71", 
+                    "x": 26, 
+                    "y": 103
+                }, 
+                "name": "label_3"
+            }, 
+            "type": "tkinter.Label"
+        }, 
+        {
+            "attrib": {
+                "attr": {}, 
+                "layout": {
+                    "bordermode": "outside", 
+                    "height": "150", 
+                    "width": "20", 
+                    "x": 479, 
+                    "y": 132
+                }, 
+                "name": "scrollbar_1"
+            }, 
+            "type": "tkinter.ttk.Scrollbar"
+        }
+    ], 
+    "type": "tkinter.Tk"
+}

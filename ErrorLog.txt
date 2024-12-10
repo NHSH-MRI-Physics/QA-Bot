@@ -1,0 +1,36 @@
+Error logged at 2024-12-10 13:56:14
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 42, in RunBot
+    filesDict = QAObj.FindFiles()
+  File "D:\QABot\QA-Bot\DailyQA_Object.py", line 26, in FindFiles
+    raise ValueError("adad")
+ValueError: adad
+
+
+Error logged at 2024-12-10 14:00:41
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 43, in RunBot
+    filesDict = QAObj.FindFiles()
+  File "D:\QABot\QA-Bot\DailyQA_Object.py", line 26, in FindFiles
+    raise ValueError("dadadwwdxwc")
+ValueError: dadadwwdxwc
+
+
+Error logged at 2024-12-10 14:01:01
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 43, in RunBot
+    filesDict = QAObj.FindFiles()
+  File "D:\QABot\QA-Bot\DailyQA_Object.py", line 26, in FindFiles
+    raise ValueError("dadadwwdxwc")
+ValueError: dadadwwdxwc
+
+
+Error logged at 2024-12-10 14:01:21
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 43, in RunBot
+    filesDict = QAObj.FindFiles()
+  File "D:\QABot\QA-Bot\DailyQA_Object.py", line 26, in FindFiles
+    raise ValueError("dadadwwdxwc")
+ValueError: dadadwwdxwc
+
+

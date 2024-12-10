@@ -6,6 +6,8 @@ import os
 import QA_Bot_Helper
 import QABot
 import gspread
+from datetime import datetime
+import glob
 
 def SendEmail(TextBody,subject,AttachmentImages=None):
     if QABot.SendEmails == False:
@@ -65,6 +67,21 @@ def UpdateGoogleSheet(Sheet,Values):
         return
     gc = gspread.service_account(filename=QABot.GoogleSheetJSON)
     sh = gc.open(QABot.WorkbookName)
-    values_list = sh.worksheet("Sheet").col_values(1)
+    values_list = sh.worksheet(Sheet).col_values(1)
     LastRow = len(values_list)+1
-    sh.worksheet("DistortionQA").update( [Values],"A"+str(LastRow))
+    sh.worksheet(Sheet).update( [Values],"A"+str(LastRow))
+
+def BackUpGoogleSheet():
+    print("Conducting Google Sheets Backup")
+    if not os.path.exists("Sheets_Backup"):
+            os.makedirs("Sheets_Backup")
+    gc = gspread.service_account(filename=QABot.GoogleSheetJSON)
+    sh = gc.open(QABot.WorkbookName)
+
+    f = open(os.path.join("Sheets_Backup", "Sheets Backup " + str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))+".csv"),'w')
+    for sheet in sh.worksheets():
+        f.write(sheet.title + "\n")
+        values = sheet.get_all_values()
+        for line in values:
+            f.write(" ".join(line)+"\n")
+        f.write("\n\n\n")
