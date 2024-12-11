@@ -6,6 +6,7 @@ import sys
 import QA_Bot_Helper
 import glob
 from pathlib import Path
+from enum import Enum
 
 #These global variables are the settings, it could probably be done alot better
 DICOMFolder = "/Users/mri/Documents/QA/ClinicalQA/RawDICOM"
@@ -14,6 +15,14 @@ UpdateGoogleSheet=True
 GoogleSheetJSON = "qaproject-441416-f5fec0c61099.json"
 WorkbookName = "QA Record"
 BackUpTime=24
+ArchivePath = "Archive"
+
+class QABotState(Enum):
+    Idle=1
+    FindingFiles=2
+    Analysis=3
+    Reporting=4
+    Cleanup=5
 
 class QABot:
     def __init__(self):
@@ -21,10 +30,15 @@ class QABot:
         self.IterationTime = 10
         self.DownloadSafeTime = 1
         self.BackupTimer = 0
-        self.running=True
-
-        if not os.path.exists("Archive"):
-            os.makedirs("Archive")
+        self.KeepRunning=True
+        self.CurrentlyRunning=False
+        self.__Status = QABotState.Idle
+        
+        if not os.path.exists(ArchivePath):
+            os.makedirs(ArchivePath)
+    
+    def GetStatus(self):
+        return self.__Status
 
     def RegisterQA(self,QAObj):
         #Function where you pass a QAObject to register it 
@@ -35,12 +49,13 @@ class QABot:
         #If a file is found call the function in QA object that runs the script 
         #After the file has be ran call the QA Objects function to do whatever you want with the results 
         #We will have two versionfo the QA Bot one that runs from a streamlit interface and one that is just command line
-
-        while self.running:
-            print ("QA Bot Still alive at " + str(datetime.datetime.now()))
+        self.CurrentlyRunning=True
+        while self.KeepRunning:
+            print ("QA Bot Still alive at " + str(datetime.datetime.now())+"\n")
             filesDict = None
             for QAObj in self.QAObjects:
                 try:
+                    self.__Status = QABotState.FindingFiles
                     filesDict = QAObj.FindFiles()
                 except Exception as e:
                     self.ShowError(e,"Find Files",QAObj)
@@ -49,22 +64,24 @@ class QABot:
                     print("Running QA : " + QAObj.QAName())
                     time.sleep(self.DownloadSafeTime) #Wait 30s to make sure it really is downaloded...
                     try:
+                        self.__Status = QABotState.Analysis
                         ResultDict = QAObj.RunAnalysis(filesDict)
                     except Exception as e:
                         self.ShowError(e,"Run Analysis",QAObj)
 
                     try:
+                        self.__Status = QABotState.Reporting
                         QAObj.ReportData(filesDict,ResultDict)
                     except Exception as e:
                         self.ShowError(e,"Report Data",QAObj)
 
                     try:
+                        self.__Status = QABotState.Cleanup
                         QAObj.CleanUpFiles(filesDict,ResultDict)
                     except Exception as e:
                         self.ShowError(e,"Clean Up Files",QAObj)
-                
-                time.sleep(self.IterationTime)
 
+                self.__Status = QABotState.Idle
                 DoBackUp=False
                 if not os.path.exists("Sheets_Backup"):
                     DoBackUp=True
@@ -84,7 +101,8 @@ class QABot:
                 
                 if DoBackUp==True:
                     QA_Bot_Helper.BackUpGoogleSheet()
-
+            time.sleep(self.IterationTime)
+        self.CurrentlyRunning=False
         print ("QA Bot Succesfully Stopped")
 
     

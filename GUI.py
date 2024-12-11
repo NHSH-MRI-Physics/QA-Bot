@@ -9,7 +9,10 @@ import DailyQA_Object
 import DistortionQA_Object
 import threading
 from tkinter import StringVar
+from tkinter import filedialog
+import time
 
+DeleteText = False
 class TextRedirector(object):
     def __init__(self, widget, tag="stdout"):
         self.widget = widget
@@ -18,22 +21,27 @@ class TextRedirector(object):
     def write(self, string):
         self.widget.configure(state="normal")
         self.widget.insert("end", string, (self.tag,))
+        NumOfLines = self.widget.get("1.0",END).count("\n")
+        if NumOfLines >=1000:
+            self.widget.delete('1.0', END)
         self.widget.configure(state="disabled")
         self.widget.see("end")
         root.update()
 
 root = tkinter.Tk()
 sv_ttk.set_theme("dark")
-root.geometry('516x400')
+root.geometry('516x430')
 root.resizable(False, False)
 root.title('QA Bot')
 QABotObj=None
-
+DefaultFolderMessage = "Checking Folder Not Set!"
+DefaultArchiveMessage = "Arhive Folder Not Set!"
 def RunQA():
     global QABotObj
     QABotObj = QABot.QABot()
-    QABotObj.IterationTime=1
-    QABot.DICOMFolder = WatchFolder.get("1.0",'end-1c')
+    QABotObj.IterationTime = int(EntryVar.get())
+    QABot.DICOMFolder = WatchFolderVar.get()
+    QABot.ArchivePath = ArchivePathVar.get()
     QABot.SendEmails=False
     QABot.UpdateGoogleSheet=False
     if EnableEmailsVar.get() == 1:
@@ -48,16 +56,74 @@ def RunQA():
         QABotObj.RegisterQA(DistortionQAObj)
     
     QABotObj.RunBot()
-Thread = None
+    QABotThread = None
+        
+def CheckifQAStopped():
+    global QABotObj
+    while QABotObj.CurrentlyRunning:
+        print(QABotObj.GetStatus())
+        #TODO every X seconds print the status of the module if its running
+        pass
+    CheckIfStoppedThread=None
+    SetStateOfWidget("enabled")
+
+def SetStateOfWidget(state):
+    Entry.config(state=state)
+    StartQABot.config(state=state)
+    DailyQACheck.config(state=state)
+    DistortionQACheck.config(state=state)
+    EnableEmails.config(state=state)
+    EnableSheets.config(state=state)
+    WatchFolderButton.config(state=state)
+    ArchivePathButton.config(state=state)
 
 def StartQA():
-    global Thread
-    Thread = threading.Thread(target=RunQA, args=[])
-    Thread.start()
+    global QABotThread
+    if EntryVar.get().isdigit() == False:
+        tkinter.messagebox.showinfo("QA Bot Error",  "Checking time must be a postiive integer!") 
+        return 
+    if WatchFolderVar.get() == DefaultFolderMessage:
+        tkinter.messagebox.showinfo("QA Bot Error",  "Set Checking Folder!") 
+        return
+    if ArchivePathVar.get() == DefaultArchiveMessage:
+        tkinter.messagebox.showinfo("QA Bot Error",  "Set Archive Folder!") 
+        return
+    
+    SetStateOfWidget("disabled")
+    QABotThread = threading.Thread(target=RunQA, args=[])
+    QABotThread.start()
 
 def StopQA():
+    global CheckIfStoppedThread
+    if QABotObj==None:
+        return
+    if QABotObj.CurrentlyRunning == False:
+        return
     print("Stopping QA Bot, please wait")
-    QABotObj.running=False
+    QABotObj.KeepRunning=False
+    CheckIfStoppedThread = threading.Thread(target=CheckifQAStopped,args=[])
+    CheckIfStoppedThread.start()
+    x = 0
+
+def GetWatchFolder():
+    if WatchFolderVar.get() != DefaultFolderMessage:
+        folder = filedialog.askdirectory(initialdir=WatchFolderVar.get())
+    else:
+        folder = filedialog.askdirectory()
+
+    if folder=="":
+        return
+    WatchFolderVar.set(folder)
+
+def GetArchiveFolder():
+    if ArchivePathVar.get() != DefaultArchiveMessage:
+        folder = filedialog.askdirectory(initialdir=ArchivePathVar.get())
+    else:
+        folder = filedialog.askdirectory()
+
+    if folder=="":
+        return
+    ArchivePathVar.set(folder)
 
 Buttons = ttk.Frame(root)
 StartQABot = ttk.Button(Buttons, text="Start QA Bot",width=10, command = StartQA)
@@ -106,16 +172,32 @@ TextLog.pack(anchor=W)
 frameLog.grid(row=1,column=0,padx=10,pady=10,columnspan=3,sticky=W)
 
 
-#TODO
-#Have watch folder button and make it set the watch folder
-#Have iterationtime button and make it set the iteration time
-#diable all the buttons when it is running (including the other settings)
 frameSettings = ttk.Frame(root)
+
+EntryLabel = ttk.Label(master=frameSettings,text="Checking Time",relief=None,borderwidth=1)
+EntryLabel.grid(row=0,column=0,sticky=W,padx=0,pady=0)
+EntryVar = StringVar()
+EntryVar.set("1")
+Entry = ttk.Entry(master=frameSettings, width = 3, textvariable=EntryVar,justify='center')
+Entry.grid(row=0,column=1,sticky=E,pady=10)
+EntryLabelRight = ttk.Label(master=frameSettings,text="Seconds",relief=None,borderwidth=1)
+EntryLabelRight.grid(row=0,column=2,sticky=W,pady=10)
+
 WatchFolderVar = StringVar()
-WatchFolderVar.set("WatchFolder")
-WatchFolderLabel = ttk.Label(master=frameSettings,textvariable=WatchFolderVar)
-WatchFolderLabel.grid(row=0,column=0,sticky=W)
-frameSettings.grid(row=2,column=0,padx=10,pady=10,columnspan=3,sticky=W)
+WatchFolderButton = ttk.Button(master = frameSettings, text="Set Checking Folder", command=GetWatchFolder,width=16)
+WatchFolderButton.grid(row=1,column=0,sticky=W,columnspan=2)
+WatchFolderVar.set(DefaultFolderMessage)
+WatchFolderLabel = ttk.Label(master=frameSettings,textvariable=WatchFolderVar,relief=None,borderwidth=1,width=40)
+WatchFolderLabel.grid(row=1,column=2,sticky=W,padx=20)
+
+ArchivePathVar = StringVar()
+ArchivePathButton = ttk.Button(master = frameSettings, text="Set Archive Folder", command=GetArchiveFolder,width=16)
+ArchivePathButton.grid(row=2,column=0,sticky=W,columnspan=2,pady=5)
+ArchivePathVar.set(DefaultArchiveMessage)
+ArchivePathLabel = ttk.Label(master=frameSettings,textvariable=ArchivePathVar,relief=None,borderwidth=1,width=40)
+ArchivePathLabel.grid(row=2,column=2,sticky=W,padx=20,pady=5)
+
+frameSettings.grid(row=2,column=0,padx=10,pady=0,columnspan=3,sticky=W)
 
 sys.stdout = TextRedirector(TextLog, "stdout")
 sys.stderr = TextRedirector(TextLog, "stderr")

@@ -34,3 +34,66 @@ Traceback (most recent call last):
 ValueError: dadadwwdxwc
 
 
+Error logged at 2024-12-11 13:56:30
+Traceback (most recent call last):
+  File "d:\QABot\QA-Bot\QABot.py", line 64, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "d:\QABot\QA-Bot\DailyQA_Object.py", line 142, in CleanUpFiles
+    os.rename(folder, self.ArchiveFolder)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:/Users/John/Desktop/Test - Copy\\DQA_Head_1' -> 'C:/DQA_Head/John/Desktop/Test\\DailyQA_DQA_Head_2024-12-11 13-56-22'
+
+
+Error logged at 2024-12-11 13:56:47
+Traceback (most recent call last):
+  File "d:\QABot\QA-Bot\QABot.py", line 64, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "d:\QABot\QA-Bot\DailyQA_Object.py", line 142, in CleanUpFiles
+    os.rename(folder, self.ArchiveFolder)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:/Users/John/Desktop/Test - Copy\\DQA_Head_1' -> 'C:/DQA_Head/John/Desktop/Test\\DailyQA_DQA_Head_2024-12-11 13-56-38'
+
+
+Error logged at 2024-12-11 14:00:55
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 64, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "D:\QABot\QA-Bot\DailyQA_Object.py", line 142, in CleanUpFiles
+    os.rename(folder, self.ArchiveFolder)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:/Users/John/Desktop/Test - Copy\\DQA_Head_1' -> 'C:/DQA_Head/John/Desktop/Test\\DailyQA_DQA_Head_2024-12-11 14-00-45'
+
+
+Error logged at 2024-12-11 14:13:59
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 64, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "D:\QABot\QA-Bot\DailyQA_Object.py", line 142, in CleanUpFiles
+    os.rename(folder, self.ArchiveFolder)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\John\\Desktop\\Test - Copy\\DQA_Head_1' -> 'C:/DQA_Head/John/Desktop/Test\\DailyQA_DQA_Head_2024-12-11 14-13-34'
+
+
+Error logged at 2024-12-11 14:16:32
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 64, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "D:\QABot\QA-Bot\DailyQA_Object.py", line 143, in CleanUpFiles
+    os.rename(folder, self.ArchiveFolder)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\John\\Desktop\\Test - Copy\\DQA_Head_1' -> 'C:\\DQA_Head\\John\\Desktop\\Test\\DailyQA_DQA_Head_2024-12-11 14-16-18'
+
+
+Error logged at 2024-12-11 14:22:13
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 64, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "D:\QABot\QA-Bot\DailyQA_Object.py", line 146, in CleanUpFiles
+    os.rename("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
+OSError: [WinError 17] The system cannot move the file to a different disk drive: 'Results_DailyQA_DQA_Head_2024-12-11_14-21-59.txt' -> 'C:/Users/John/Desktop/Test\\DailyQA_DQA_Head_2024-12-11 14-21-59\\Results_DailyQA_DQA_Head_2024-12-11_14-21-59.txt'
+
+
+Error logged at 2024-12-11 14:29:01
+Traceback (most recent call last):
+  File "D:\QABot\QA-Bot\QABot.py", line 64, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "D:\QABot\QA-Bot\DistortionQA_Object.py", line 94, in CleanUpFiles
+    os.rename("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",os.path.join(self.ArchiveFolder,"DistortionQA_"+self.ScannerName+"_"+self.Date+".txt"))
+OSError: [WinError 17] The system cannot move the file to a different disk drive: 'DistortionQA_Raigmore Hospital MRI 1_2024-12-11 14-28-53.txt' -> 'C:/Users/John/Desktop/Test - Copy\\DistortionQA_Raigmore Hospital MRI 1_2024-12-11 14-28-53\\DistortionQA_Raigmore Hospital MRI 1_2024-12-11 14-28-53.txt'
+
+

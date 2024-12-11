@@ -36,7 +36,7 @@ class DailyQAObj(QABot.QAObject):
                         file = glob.glob( os.path.join( folder,"*.dcm"))[0]
                         LoadedDICOM = pydicom.read_file( file )
                         self.scanername =LoadedDICOM[0x08,0x80].value.split(" ")[-2]  + " " + LoadedDICOM[0x08,0x80].value.split(" ")[-1]
-                        return {"folder":folder, "QAName":QAName}
+                        return {"folder":folder , "QAName":QAName}
 
 
     def RunAnalysis(self, files):
@@ -76,8 +76,11 @@ class DailyQAObj(QABot.QAObject):
                 TEXT+=line +  "\n"
 
 
-            self.ArchiveFolder = os.path.join("Archive","DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S")))
+            #self.ArchiveFolder = os.path.join("DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S")))
+            self.ArchiveFolder = "DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S"))
             self.ArchiveFolder = self.ArchiveFolder.replace("Users", QAName)
+            self.ArchiveFolder = os.path.join(QABot.ArchivePath,self.ArchiveFolder)
+            #self.ArchiveFolder = os.path.abspath(self.ArchiveFolder)
 
             NumberOfFilesLastRun = int(np.load("temp.npy"))
             TimePerImage = 0.028
@@ -139,8 +142,8 @@ class DailyQAObj(QABot.QAObject):
 
         #Move to the archive 
         os.system("echo ilovege | sudo -S chown mri "+folder)
-        os.rename(folder, self.ArchiveFolder)
-        os.rename("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
+        shutil.move(folder, self.ArchiveFolder)
+        shutil.move("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
         if (self.QASuccess==True):
             for result in Results:
                 shutil.copyfile(os.path.join("DailyQA","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"), os.path.join(self.ArchiveFolder,result[-1]+"_SmoothMethod.png"))

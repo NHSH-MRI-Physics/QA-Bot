@@ -69,7 +69,7 @@ class DistortionQAObj(QABot.QAObject):
         TEXT+= "Max Interplate Distortion: " + str(round(ResultDict["Interplate Max Distortion"][0],2)) +"mm \n"
         TEXT+= "Max Intraplate Distortion: " + str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)) +" mm" +"\n"
         self.Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
-        self.ArchiveFolder = os.path.join("Archive","DistortionQA_"+self.ScannerName+"_"+self.Date)
+        self.ArchiveFolder = os.path.join(QABot.ArchivePath,"DistortionQA_"+self.ScannerName+"_"+self.Date)
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
         QA_Bot_Helper.SendEmail(TEXT,subject,images)
         
@@ -90,11 +90,11 @@ class DistortionQAObj(QABot.QAObject):
     def CleanUpFiles(self, files, ResultDict):
         folder = files["folder"]
         os.system("echo ilovege | sudo -S chown mri "+folder)
-        os.rename(folder, self.ArchiveFolder)
-        os.rename("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",os.path.join(self.ArchiveFolder,"DistortionQA_"+self.ScannerName+"_"+self.Date+".txt"))
+        shutil.move(folder, self.ArchiveFolder)
+        shutil.move("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",os.path.join(self.ArchiveFolder,"DistortionQA_"+self.ScannerName+"_"+self.Date+".txt"))
         images = glob.glob("DistCalc_*.png")
         for image in images:
-            os.rename(image,os.path.join(self.ArchiveFolder,image))
+            shutil.move(image,os.path.join(self.ArchiveFolder,image))
 
     def QAName(self):
         return "Distortion QA"

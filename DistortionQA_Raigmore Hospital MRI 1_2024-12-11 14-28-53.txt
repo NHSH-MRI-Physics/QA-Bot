@@ -1,0 +1,4 @@
+Date: 2024-12-11 14-28-53
+Scanner: Raigmore Hospital MRI 1
+Interplate Max Distortion 2.03mm
+Intraplate Max Distortion 3.68mm
