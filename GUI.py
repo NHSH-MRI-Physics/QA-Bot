@@ -12,6 +12,7 @@ from tkinter import StringVar
 from tkinter import filedialog
 import time
 
+
 DeleteText = False
 class TextRedirector(object):
     def __init__(self, widget, tag="stdout"):
@@ -61,8 +62,7 @@ def RunQA():
 def CheckifQAStopped():
     global QABotObj
     while QABotObj.CurrentlyRunning:
-        print(QABotObj.GetStatus())
-        #TODO every X seconds print the status of the module if its running
+        #print(QABotObj.GetStatus())
         pass
     CheckIfStoppedThread=None
     SetStateOfWidget("enabled")
@@ -92,18 +92,20 @@ def StartQA():
     SetStateOfWidget("disabled")
     QABotThread = threading.Thread(target=RunQA, args=[])
     QABotThread.start()
+    CheckStatus()
 
 def StopQA():
     global CheckIfStoppedThread
+    global QABotObj
     if QABotObj==None:
-        return
-    if QABotObj.CurrentlyRunning == False:
-        return
+        return 
+    else:
+        if QABotObj.CurrentlyRunning == False:
+            return
     print("Stopping QA Bot, please wait")
     QABotObj.KeepRunning=False
     CheckIfStoppedThread = threading.Thread(target=CheckifQAStopped,args=[])
     CheckIfStoppedThread.start()
-    x = 0
 
 def GetWatchFolder():
     if WatchFolderVar.get() != DefaultFolderMessage:
@@ -127,10 +129,14 @@ def GetArchiveFolder():
 
 Buttons = ttk.Frame(root)
 StartQABot = ttk.Button(Buttons, text="Start QA Bot",width=10, command = StartQA)
-StartQABot.grid(row=0,column=0,padx=5,pady=5)
+StartQABot.grid(row=1,column=0,padx=5,pady=0)
 
 StopQABot = ttk.Button(Buttons, text="Stop QA Bot",width=10, command = StopQA)
-StopQABot.grid(row=1,column=0,padx=5,pady=5)
+StopQABot.grid(row=2,column=0,padx=5,pady=5)
+
+StatusLabel = ttk.Label(master=Buttons,text="Not Running",relief=None,borderwidth=1,foreground="snow")
+StatusLabel.grid(row=0,column=0)
+
 Buttons.grid(row=0, column=0,padx=10,pady=10,rowspan=1,sticky=W,columnspan=1)
 
 Modules = ttk.Frame(root)
@@ -157,7 +163,7 @@ EnableEmails.grid(row=1, column=0,sticky=W,padx=0,pady=0)
 EnableSheetsVar = IntVar(value=1)
 EnableSheets = ttk.Checkbutton(Options, text='Enable Sheets',variable=EnableSheetsVar, onvalue=1, offvalue=0,state=NORMAL,command=None)
 EnableSheets.grid(row=2, column=0,sticky=W,padx=0,pady=0)
-Options.grid(row=0, column=2,padx=10,pady=7,rowspan=1,sticky=W,columnspan=1)
+Options.grid(row=0, column=2,padx=10,pady=2,rowspan=1,sticky=W,columnspan=1)
 
 frameLog = ttk.Frame(root)
 scroll = ttk.Scrollbar(frameLog) 
@@ -169,7 +175,7 @@ TextLog = tkinter.Text(frameLog, height=10, width=60,state=DISABLED,yscrollcomma
 scrollLog.config(command=TextLog.yview)
 TextLog.configure(yscrollcommand=scrollLog.set) 
 TextLog.pack(anchor=W)
-frameLog.grid(row=1,column=0,padx=10,pady=10,columnspan=3,sticky=W)
+frameLog.grid(row=1,column=0,padx=10,pady=5,columnspan=3,sticky=W)
 
 
 frameSettings = ttk.Frame(root)
@@ -201,5 +207,23 @@ frameSettings.grid(row=2,column=0,padx=10,pady=0,columnspan=3,sticky=W)
 
 sys.stdout = TextRedirector(TextLog, "stdout")
 sys.stderr = TextRedirector(TextLog, "stderr")
+
+def CheckStatus():
+    if QABotObj==None:
+        StatusLabel.config(text="Not Running",foreground="snow")
+    else:
+        status = QABotObj.GetStatus()
+        if status == QABot.QABotState.Idle:
+            StatusLabel.config(text="Idle",foreground="green")
+        elif status == QABot.QABotState.FindingFiles:
+            StatusLabel.config(text="Finding Files",foreground="blue")
+        elif status == QABot.QABotState.Analysis:
+            StatusLabel.config(text="Analysis",foreground="yellow")
+        elif status == QABot.QABotState.Reporting:
+            StatusLabel.config(text="Reporting",foreground="orange")
+        elif status == QABot.QABotState.Cleanup:
+            StatusLabel.config(text="Cleaning Up",foreground="purple")
+    root.after(1000,CheckStatus)
+CheckStatus()
 
 root.mainloop()

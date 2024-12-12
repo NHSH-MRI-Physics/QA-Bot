@@ -51,12 +51,14 @@ class QABot:
         #We will have two versionfo the QA Bot one that runs from a streamlit interface and one that is just command line
         self.CurrentlyRunning=True
         while self.KeepRunning:
-            print ("QA Bot Still alive at " + str(datetime.datetime.now())+"\n")
+            print ("QA Bot Still alive at " + str(datetime.datetime.now()))
             filesDict = None
+            self.__Status = QABotState.Idle #Reset it back to idle each time...
             for QAObj in self.QAObjects:
                 try:
                     self.__Status = QABotState.FindingFiles
                     filesDict = QAObj.FindFiles()
+                    self.__Status = QABotState.Idle
                 except Exception as e:
                     self.ShowError(e,"Find Files",QAObj)
             
