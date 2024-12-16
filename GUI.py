@@ -31,7 +31,7 @@ class TextRedirector(object):
 
 root = tkinter.Tk()
 sv_ttk.set_theme("dark")
-root.geometry('516x430')
+#root.geometry('516x430')
 root.resizable(False, False)
 root.title('QA Bot')
 QABotObj=None
