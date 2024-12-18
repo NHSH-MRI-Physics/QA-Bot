@@ -10,3 +10,5 @@ ManHoursSaved.npy
 ManHoursSaved.npy
 /Sheets_Backup
 ErrorLog.txt
+/PyInstaller
+/build

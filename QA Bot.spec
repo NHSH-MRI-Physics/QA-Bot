@@ -1,12 +1,16 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_data_files
+
+datas = []
+datas += collect_data_files('randfacts')
 
 
 a = Analysis(
     ['GUI.py'],
-    pathex=[],
+    pathex=['.'],
     binaries=[],
-    datas=[],
-    hiddenimports=[],
+    datas=datas,
+    hiddenimports=['scipy.signal', 'cv2', 'email.mime', 'email.mime.multipart', 'email.mime.text', 'skimage', 'skimage.feature'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

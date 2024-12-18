@@ -11,7 +11,7 @@ import threading
 from tkinter import StringVar
 from tkinter import filedialog
 import time
-
+from pathlib import Path
 
 DeleteText = False
 class TextRedirector(object):
@@ -87,6 +87,16 @@ def StartQA():
         return
     if ArchivePathVar.get() == DefaultArchiveMessage:
         tkinter.messagebox.showinfo("QA Bot Error",  "Set Archive Folder!") 
+        return
+    
+    if Path("Emails.txt").is_file() == False:
+        tkinter.messagebox.showinfo("Missing Files!",  "Email.txt is missing!") 
+        return
+    if Path("password.txt").is_file() == False:
+        tkinter.messagebox.showinfo("Missing Files!",  "password.txt is missing, this is required for emails!") 
+        return
+    if Path("qaproject-441416-f5fec0c61099.json").is_file() == False:
+        tkinter.messagebox.showinfo("Missing Files!",  "password.txt is missing, this is required for emails!") 
         return
     
     SetStateOfWidget("disabled")
