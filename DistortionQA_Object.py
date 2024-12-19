@@ -22,6 +22,7 @@ class DistortionQAObj(QABot.QAObject):
         self.ScannerName = None
         self.ArchiveFolder = None
         self.Date=None
+        self.foundThresh=False
 
     def FindFiles(self):
         SubFolders = [x[0] for x in os.walk(QABot.DICOMFolder)]
@@ -56,8 +57,10 @@ class DistortionQAObj(QABot.QAObject):
 
         res = minimize_scalar(lambda thresh: RunDist(thresh,files,self.ChosenSequence),bounds=(maxpixel*0.1,maxpixel*0.5),options = {"disp": 3,"xatol": 10,"maxiter":50})
         if res.fun==0:
+            self.foundThresh=True
             return self.Results
         else:
+            self.foundThresh=False
             raise Exception("Error: The optimisation algorthim could not find a sutible threshold, consider running the data manually")
     
     def ReportData(self, files, ResultDict):
@@ -71,20 +74,30 @@ class DistortionQAObj(QABot.QAObject):
         self.Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
         self.ArchiveFolder = os.path.join(QABot.ArchivePath,"DistortionQA_"+self.ScannerName+"_"+self.Date)
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
-        QA_Bot_Helper.SendEmail(TEXT,subject,images)
+
+        if self.foundThresh==True:
+            QA_Bot_Helper.SendEmail(TEXT,subject,images)
         
         Values = []
         Values.append(self.Date)
         Values.append(self.ScannerName)
-        Values.append(str(round(ResultDict["Interplate Max Distortion"][0],2)))
-        Values.append(str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)))
+        if self.foundThresh == True:
+            Values.append(str(round(ResultDict["Interplate Max Distortion"][0],2)))
+            Values.append(str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)))
+        else:
+            Values.append("Run code manually")
+            Values.append("Run code manually")
         QA_Bot_Helper.UpdateGoogleSheet("DistortionQA",Values)
 
         f = open("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",'w')
         f.write("Date: "+str(self.Date) + "\n")
         f.write("Scanner: " + self.ScannerName + "\n")
-        f.write("Interplate Max Distortion " + str(round(ResultDict["Interplate Max Distortion"][0],2)) + "mm\n")
-        f.write("Intraplate Max Distortion " + (str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2))) + "mm\n")
+        if self.foundThresh == True:
+            f.write("Interplate Max Distortion " + str(round(ResultDict["Interplate Max Distortion"][0],2)) + "mm\n")
+            f.write("Intraplate Max Distortion " + (str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2))) + "mm\n")
+        else:
+            f.write("Interplate Max Distortion Run Code Manually\n")
+            f.write("Intraplate Max Distortion Run Code Manually\n")
         QA_Bot_Helper.UpdateTotalManHours(5.12)
 
     def CleanUpFiles(self, files, ResultDict):
