@@ -12,3 +12,4 @@ ManHoursSaved.npy
 ErrorLog.txt
 /PyInstaller
 /build
+\.PyInstaller\*
