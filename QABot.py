@@ -54,6 +54,7 @@ class QABot:
             print ("QA Bot Still alive at " + str(datetime.datetime.now()))
             filesDict = None
             self.__Status = QABotState.Idle #Reset it back to idle each time...
+            ResultDict=None
             for QAObj in self.QAObjects:
                 try:
                     self.__Status = QABotState.FindingFiles

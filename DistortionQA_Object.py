@@ -62,6 +62,7 @@ class DistortionQAObj(QABot.QAObject):
         else:
             self.foundThresh=False
             raise Exception("Error: The optimisation algorthim could not find a sutible threshold, consider running the data manually")
+            return self.Results
     
     def ReportData(self, files, ResultDict):
         #print(ResultDict)
@@ -69,8 +70,12 @@ class DistortionQAObj(QABot.QAObject):
         subject = "Distortion QA Results: " + self.ScannerName  
 
         TEXT = ""
-        TEXT+= "Max Interplate Distortion: " + str(round(ResultDict["Interplate Max Distortion"][0],2)) +"mm \n"
-        TEXT+= "Max Intraplate Distortion: " + str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)) +" mm" +"\n"
+        if self.foundThresh == True:
+            TEXT+= "Max Interplate Distortion: " + str(round(ResultDict["Interplate Max Distortion"][0],2)) +"mm \n"
+            TEXT+= "Max Intraplate Distortion: " + str(round(max(x[0] for x in ResultDict["Intraplate Max Distortion"]),2)) +" mm" +"\n"
+        else:
+            TEXT+= "Max Interplate Distortion: Run Code Manually\n"
+            TEXT+= "Max Intraplate Distortion: Run Code Manually\n"
         self.Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
         self.ArchiveFolder = os.path.join(QABot.ArchivePath,"DistortionQA_"+self.ScannerName+"_"+self.Date)
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
