@@ -96,7 +96,7 @@ def StartQA():
         tkinter.messagebox.showinfo("Missing Files!",  "password.txt is missing, this is required for emails!") 
         return
     if Path("qaproject-441416-f5fec0c61099.json").is_file() == False:
-        tkinter.messagebox.showinfo("Missing Files!",  "password.txt is missing, this is required for emails!") 
+        tkinter.messagebox.showinfo("Missing Files!",  "google sheets json is missing, this is required for emails!") 
         return
     
     SetStateOfWidget("disabled")

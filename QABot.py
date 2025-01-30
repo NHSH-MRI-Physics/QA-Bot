@@ -28,7 +28,7 @@ class QABot:
     def __init__(self):
         self.QAObjects = []
         self.IterationTime = 10
-        self.DownloadSafeTime = 1
+        self.DownloadSafeTime = 30
         self.BackupTimer = 0
         self.KeepRunning=True
         self.CurrentlyRunning=False

@@ -13,3 +13,9 @@ ErrorLog.txt
 /PyInstaller
 /build
 .\PyInstaller/
+/venv
+/.\PyInstaller
+/.\PyInstaller/QA Bot
+/.\PyInstaller/QA Bot/_internal
+/.\PyInstaller
+/.\PyInstaller/QA Bot
