@@ -16,6 +16,9 @@ import os
 import subprocess
 from scipy.optimize import basinhopping
 
+import warnings
+
+
 class DistortionQAObj(QABot.QAObject):
     def __init__(self):
         self.sequence = ["3D Sag T1 BRAVO Geom Core","3D Sag T1 BRAVO DL","3D Sag T1 BRAVO BW=15 Shim off"]
@@ -25,6 +28,8 @@ class DistortionQAObj(QABot.QAObject):
         self.Date=None
         self.foundThresh=False
         self.ThreshErrorCountsChecker = None
+
+        warnings.filterwarnings("ignore")
 
     def FindFiles(self):
         SubFolders = [x[0] for x in os.walk(QABot.DICOMFolder)]
@@ -69,10 +74,8 @@ class DistortionQAObj(QABot.QAObject):
             return ComputeDistortion.ErrorMetric
 
 
-
-
         def StatusChecker(x, f, accepted):
-                print(self.ThreshErrorCountsChecker,x,f)
+                print("Current Thresh: " + str(x[0]) + "\nNumber of Out of place Spheres: " + str(self.ThreshErrorCountsChecker)+ "\nCurrent Optimiser Value: " + str(f) +"\n")
                 if (self.ThreshErrorCountsChecker == 0):
                     return True
 
@@ -102,6 +105,8 @@ class DistortionQAObj(QABot.QAObject):
         self.ArchiveFolder = os.path.join(QABot.ArchivePath,"DistortionQA_"+self.ScannerName+"_"+self.Date)
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
 
+        QA_Bot_Helper.UpdateTotalManHours(5.12)
+
         if self.foundThresh==True:
             QA_Bot_Helper.SendEmail(TEXT,subject,images)
         
@@ -125,7 +130,7 @@ class DistortionQAObj(QABot.QAObject):
         else:
             f.write("Interplate Max Distortion Run Code Manually\n")
             f.write("Intraplate Max Distortion Run Code Manually\n")
-        QA_Bot_Helper.UpdateTotalManHours(5.12)
+        
 
     def CleanUpFiles(self, files, ResultDict):
         folder = files["folder"]

@@ -61,7 +61,7 @@ class DailyQAObj(QABot.QAObject):
                 self.QAResult.append(QAResult)
                 OverallPass.append(QAResult[0])
                 EmailResultLines.append(QAResult[1])
-                images.append(os.path.join("DailyQA","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"))
+                images.append(os.path.join("DailyQACode","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"))
             self.overallpass = OverallPass
             self.date = datetime.datetime.now()
         
@@ -147,10 +147,10 @@ class DailyQAObj(QABot.QAObject):
         shutil.move("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
         if (self.QASuccess==True):
             for result in Results:
-                shutil.copyfile(os.path.join("DailyQA","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"), os.path.join(self.ArchiveFolder,result[-1]+"_SmoothMethod.png"))
+                shutil.copyfile(os.path.join("DailyQACode","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"), os.path.join(self.ArchiveFolder,result[-1]+"_SmoothMethod.png"))
 
         #Delete all the images in the results folder
-        images = glob.glob(os.path.join("DailyQA","DailyQA-main","Results","*.png"))
+        images = glob.glob(os.path.join("DailyQACode","DailyQA-main","Results","*.png"))
         for image in images:
             os.remove(image)
 

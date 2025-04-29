@@ -174,3 +174,205 @@ Traceback (most recent call last):
 IndexError: list index out of range
 
 
+Error logged at 2025-04-29 14:37:40
+Traceback (most recent call last):
+  File "c:\Users\Johnt\anaconda3\Lib\shutil.py", line 847, in move
+    os.rename(src, real_dst)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'DistortionQA_Raigmore Hospital MRI 1_2025-04-29 14-37-23.txt' -> 'C:/Users/Johnt/Desktop/Output\\DistortionQA_Raigmore Hospital MRI 1_2025-04-29 14-37-23\\DistortionQA_Raigmore Hospital MRI 1_2025-04-29 14-37-23.txt'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 83, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 137, in CleanUpFiles
+    shutil.move("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",os.path.join(self.ArchiveFolder,"DistortionQA_"+self.ScannerName+"_"+self.Date+".txt"))
+  File "c:\Users\Johnt\anaconda3\Lib\shutil.py", line 868, in move
+    os.unlink(src)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'DistortionQA_Raigmore Hospital MRI 1_2025-04-29 14-37-23.txt'
+
+
+Error logged at 2025-04-29 14:57:34
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 77, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 88, in ReportData
+    QA_Bot_Helper.UpdateTotalManHours(TimePerImage*NumberOfFilesLastRun)
+  File "c:\Users\Johnt\Documents\QA-Bot\QA_Bot_Helper.py", line 61, in UpdateTotalManHours
+    NewHours = CurrentHours+hours
+               ~~~~~~~~~~~~^~~~~~
+TypeError: can only concatenate str (not "float") to str
+
+
+Error logged at 2025-04-29 14:57:34
+Traceback (most recent call last):
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 847, in move
+    os.rename(src, real_dst)
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'Results_DailyQA_DQA_Head_2025-04-29_14-57-32.txt' -> 'C:/Users/Johnt/Desktop/Output\\DailyQA_DQA_Head_2025-04-29 14-57-32\\Results_DailyQA_DQA_Head_2025-04-29_14-57-32.txt'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 83, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 147, in CleanUpFiles
+    shutil.move("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 867, in move
+    copy_function(src, real_dst)
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 460, in copy2
+    _winapi.CopyFile2(src_, dst_, flags)
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+
+Error logged at 2025-04-29 15:02:36
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 77, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 88, in ReportData
+    QA_Bot_Helper.UpdateTotalManHours(TimePerImage*NumberOfFilesLastRun)
+  File "C:\Users\Johnt\Documents\QA-Bot\QA_Bot_Helper.py", line 65, in UpdateTotalManHours
+    sh.worksheet("ManHoursLog").update( NewHours,"A1")
+  File "c:\Users\Johnt\anaconda3\Lib\site-packages\gspread\worksheet.py", line 1242, in update
+    response = self.client.values_update(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\anaconda3\Lib\site-packages\gspread\http_client.py", line 173, in values_update
+    r = self.request("put", url, params=params, json=body)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\anaconda3\Lib\site-packages\gspread\http_client.py", line 128, in request
+    raise APIError(response)
+gspread.exceptions.APIError: APIError: [400]: Invalid value at 'data.values' (type.googleapis.com/google.protobuf.ListValue), 800.48200000000008
+
+
+Error logged at 2025-04-29 15:02:36
+Traceback (most recent call last):
+  File "c:\Users\Johnt\anaconda3\Lib\shutil.py", line 847, in move
+    os.rename(src, real_dst)
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'Results_DailyQA_DQA_Head_2025-04-29_15-00-23.txt' -> 'C:/Users/Johnt/Desktop/Output\\DailyQA_DQA_Head_2025-04-29 15-00-23\\Results_DailyQA_DQA_Head_2025-04-29_15-00-23.txt'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 83, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 147, in CleanUpFiles
+    shutil.move("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
+  File "c:\Users\Johnt\anaconda3\Lib\shutil.py", line 867, in move
+    copy_function(src, real_dst)
+  File "c:\Users\Johnt\anaconda3\Lib\shutil.py", line 460, in copy2
+    _winapi.CopyFile2(src_, dst_, flags)
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+
+Error logged at 2025-04-29 15:08:33
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 83, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 150, in CleanUpFiles
+    shutil.copyfile(os.path.join("DailyQA","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"), os.path.join(self.ArchiveFolder,result[-1]+"_SmoothMethod.png"))
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 260, in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'DailyQA\\DailyQA-main\\Results\\Ax EPI-GRE head_SmoothMethod.png'
+
+
+Error logged at 2025-04-29 15:24:13
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 83, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 150, in CleanUpFiles
+    shutil.copyfile(os.path.join("DailyQA","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"), os.path.join(self.ArchiveFolder,result[-1]+"_SmoothMethod.png"))
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 260, in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'DailyQA\\DailyQA-main\\Results\\Ax EPI-GRE head_SmoothMethod.png'
+
+
+Error logged at 2025-04-29 15:55:27
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 77, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 60, in ReportData
+    QAResult = Helper.DidQAPassV2(result)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DailyQACode\DailyQA-main\DQA_Scripts\Helper.py", line 436, in DidQAPassV2
+    RelSNR = ROIResults[ROI][Slice]/ROIBaseline[ROI][Slice][0]
+                                    ~~~~~~~~~~~~~~~~^^^^^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-04-29 15:55:27
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 83, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 146, in CleanUpFiles
+    shutil.move(folder, self.ArchiveFolder)
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 833, in move
+    if os.path.isdir(dst):
+       ^^^^^^^^^^^^^^^^^^
+TypeError: _path_isdir: path should be string, bytes, os.PathLike or integer, not NoneType
+
+
+Error logged at 2025-04-29 15:58:26
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 77, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 109, in ReportData
+    QA_Bot_Helper.SendEmail(TEXT,subject,images)
+  File "c:\Users\Johnt\Documents\QA-Bot\QA_Bot_Helper.py", line 37, in SendEmail
+    TEXT+="Estimated Total Man Hours Saved: " + str( round(QA_Bot_Helper.GetTotalManHoursSaved(),2)) + " hours\n\n"
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: type str doesn't define __round__ method
+
+
+Error logged at 2025-04-29 16:07:13
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 71, in RunBot
+    ResultDict = QAObj.RunAnalysis(filesDict)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 57, in RunAnalysis
+    ComputeDistortion = Compute_Distortion.DistortionCalculation(files["folder"], self.ChosenSequence)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Johnt\Documents\QA-Bot\DistortionQACode\Distortion-QA-main\Compute_Distortion.py", line 78, in __init__
+    LoadedDICOM = pydicom.read_file( file )
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Johnt\anaconda3\Lib\site-packages\pydicom\filereader.py", line 1029, in dcmread
+    dataset = read_partial(
+              ^^^^^^^^^^^^^
+  File "C:\Users\Johnt\anaconda3\Lib\site-packages\pydicom\filereader.py", line 780, in read_partial
+    preamble = read_preamble(fileobj, force)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Johnt\anaconda3\Lib\site-packages\pydicom\filereader.py", line 724, in read_preamble
+    raise InvalidDicomError(
+pydicom.errors.InvalidDicomError: File is missing DICOM File Meta Information header or the 'DICM' prefix is missing from the header. Use force=True to force reading.
+
+
+Error logged at 2025-04-29 16:07:16
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 77, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 99, in ReportData
+    TEXT+= "Max Interplate Distortion: " + str(round(ResultDict["Interplate Max Distortion"][0],2)) +"mm \n"
+                                                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable
+
+
+Error logged at 2025-04-29 16:07:19
+Traceback (most recent call last):
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 847, in move
+    os.rename(src, real_dst)
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'DistortionQA_Raigmore Hospital MRI 1_2025-04-29 16-05-31.txt' -> 'C:/Users/Johnt/Desktop/Output\\DistortionQA_Raigmore Hospital MRI 1_2025-04-29 16-05-31\\DistortionQA_Raigmore Hospital MRI 1_2025-04-29 16-05-31.txt'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 83, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 139, in CleanUpFiles
+    shutil.move("DistortionQA_"+self.ScannerName+"_"+self.Date+".txt",os.path.join(self.ArchiveFolder,"DistortionQA_"+self.ScannerName+"_"+self.Date+".txt"))
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 867, in move
+    copy_function(src, real_dst)
+  File "C:\Users\Johnt\anaconda3\Lib\shutil.py", line 460, in copy2
+    _winapi.CopyFile2(src_, dst_, flags)
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+
+

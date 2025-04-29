@@ -49,17 +49,17 @@ def SendEmail(TextBody,subject,AttachmentImages=None):
             s.send_message(msg)
 
 def GetTotalManHoursSaved():
-    TotalTimeSaved = float(np.load("ManHoursSaved.npy"))
-    return TotalTimeSaved
+    gc = gspread.service_account(filename=QABot.GoogleSheetJSON)
+    sh = gc.open(QABot.WorkbookName)
+    
+    CurrentHours =  sh.worksheet("ManHoursLog").acell("A1").value
+    return float(CurrentHours)
 
 def UpdateTotalManHours(hours):
-    if os.path.isfile("ManHoursSaved.npy") == False:
-        TimeSaved = 0.0
-        np.save("ManHoursSaved.npy",TimeSaved)
-    TotalTimeSaved = float(np.load("ManHoursSaved.npy"))
-    TotalTimeSaved+=hours
-    np.save("ManHoursSaved.npy",TotalTimeSaved)
-
+    CurrentHours = float(GetTotalManHoursSaved())    
+    gc = gspread.service_account(filename=QABot.GoogleSheetJSON)
+    sh = gc.open(QABot.WorkbookName)
+    sh.worksheet("ManHoursLog").update([[CurrentHours+hours]],"A1",)
 
 def UpdateGoogleSheet(Sheet,Values):
     if QABot.UpdateGoogleSheet == False:

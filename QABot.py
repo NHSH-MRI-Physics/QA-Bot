@@ -85,25 +85,36 @@ class QABot:
                         self.ShowError(e,"Clean Up Files",QAObj)
 
                 self.__Status = QABotState.Idle
-                DoBackUp=False
-                if not os.path.exists("Sheets_Backup"):
-                    DoBackUp=True
-                else:
-                    files = glob.glob(os.path.join("Sheets_Backup",'*.csv'))
-                    if len(files) == 0:
+
+                try:
+                    DoBackUp=False
+                    if not os.path.exists("Sheets_Backup"):
                         DoBackUp=True
                     else:
-                        dates = []
-                        for file in files:
-                            date = file.split()[2].split("-")
-                            dates.append( datetime.datetime( int(date[0]), int(date[1]), int(date[2])) )
-                        dates = sorted(dates)
-                        latestdate = dates[-1]
-                        if datetime.datetime.now() > latestdate+datetime.timedelta(days=1):
+                        files = glob.glob(os.path.join("Sheets_Backup",'*.csv'))
+                        if len(files) == 0:
                             DoBackUp=True
-                
-                if DoBackUp==True:
-                    QA_Bot_Helper.BackUpGoogleSheet()
+                        else:
+                            dates = []
+                            for file in files:
+                                date = file.split()[2].split("-")
+                                dates.append( datetime.datetime( int(date[0]), int(date[1]), int(date[2])) )
+                            dates = sorted(dates)
+                            latestdate = dates[-1]
+                            if datetime.datetime.now() > latestdate+datetime.timedelta(days=1):
+                                DoBackUp=True
+                    
+                    if DoBackUp==True:
+                        QA_Bot_Helper.BackUpGoogleSheet()
+                except Exception as e:
+
+                    TEXT=""
+                    TEXT+= "An error occured during the google sheet backup process \n\n"
+                    TEXT+="Error:\n"
+                    TEXT+=str(e)+"\n\n"
+                    subject = "QABot: Google sheets back up error"
+                    QA_Bot_Helper.SendEmail(TEXT,subject)
+                    
             time.sleep(self.IterationTime)
         self.CurrentlyRunning=False
         print ("QA Bot Succesfully Stopped")

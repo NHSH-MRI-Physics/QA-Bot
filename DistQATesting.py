@@ -45,7 +45,7 @@ def RunDist(thresh,files,seq):
 from scipy.optimize import basinhopping
 
 def StatusChecker(x, f, accepted):
-        print(ThreshErrorCountsChecker,x,f)
+        print(ThreshErrorCountsChecker,x,f,accepted)
         if (ThreshErrorCountsChecker == 0):
               return True
 
