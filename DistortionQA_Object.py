@@ -2,11 +2,10 @@ from datetime import datetime
 import QABot
 import os
 import sys
-sys.path.insert(0, os.path.join('DistortionQA','Distortion-QA-main'))
+sys.path.insert(0, os.path.join('DistortionQACode','Distortion-QA-main'))
 import Analysis
 import Compute_Distortion
 import shutil
-import Helper
 import QA_Bot_Helper
 import numpy as np
 import glob
@@ -14,6 +13,7 @@ import pydicom
 import gspread
 from scipy.optimize import minimize_scalar
 import os
+import subprocess
 
 class DistortionQAObj(QABot.QAObject):
     def __init__(self):
@@ -116,3 +116,9 @@ class DistortionQAObj(QABot.QAObject):
 
     def QAName(self):
         return "Distortion QA"
+    
+    def RunUnitTest(self):
+        current_dir = os.getcwd()
+        os.chdir(os.path.join(current_dir,"DistortionQACode","Distortion-QA-main"))
+        result = subprocess.run(["python", "-m", "unittest", "UnitTests.py"], check=True)
+        os.chdir(current_dir)

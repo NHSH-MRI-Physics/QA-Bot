@@ -161,3 +161,8 @@ class QAObject(ABC):
     @abstractmethod
     def QAName(self):
         pass
+    
+    #Run the unit tests
+    @abstractmethod
+    def RunUnitTest(self):
+        pass

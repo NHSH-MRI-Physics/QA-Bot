@@ -2,7 +2,7 @@ import datetime
 import QABot
 import os
 import sys
-sys.path.insert(0, os.path.join('DailyQA','DailyQA-main','DQA_Scripts'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "DailyQACode", "DailyQA-main", "DQA_Scripts"))
 import DailyQA
 import shutil
 import Helper
@@ -11,6 +11,7 @@ import numpy as np
 import glob
 import pydicom
 import gspread
+import subprocess
 
 class DailyQAObj(QABot.QAObject):
     def __init__(self):
@@ -156,3 +157,8 @@ class DailyQAObj(QABot.QAObject):
     def QAName(self):
         return "Daily QA"
     
+    def RunUnitTest(self):
+        current_dir = os.getcwd()
+        os.chdir(os.path.join(current_dir,"DailyQACode","DailyQA-main"))
+        result = subprocess.run(["python", "-m", "unittest", "UnitTesting/UnitTests.py"], check=True)
+        os.chdir(current_dir)

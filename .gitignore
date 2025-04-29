@@ -19,3 +19,6 @@ ErrorLog.txt
 /.\PyInstaller/QA Bot/_internal
 /.\PyInstaller
 /.\PyInstaller/QA Bot
+/DistortionQATest
+/DailyQACode
+/DistortionQACode
