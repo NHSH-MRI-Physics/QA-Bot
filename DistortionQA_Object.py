@@ -14,6 +14,7 @@ import gspread
 from scipy.optimize import minimize_scalar
 import os
 import subprocess
+from scipy.optimize import basinhopping
 
 class DistortionQAObj(QABot.QAObject):
     def __init__(self):
@@ -23,9 +24,20 @@ class DistortionQAObj(QABot.QAObject):
         self.ArchiveFolder = None
         self.Date=None
         self.foundThresh=False
+        self.ThreshErrorCountsChecker = None
 
     def FindFiles(self):
         SubFolders = [x[0] for x in os.walk(QABot.DICOMFolder)]
+
+        i=0
+        IdxToDel = None
+        for folder in SubFolders:
+            if folder == QABot.DICOMFolder:
+                IdxToDel=i
+            i+=1
+        if IdxToDel != None:
+            del SubFolders[IdxToDel]
+
         for folder in SubFolders:
             if ("Distortion".upper()  in folder.upper()):
                 DICOMFiles = glob.glob(os.path.join(folder,"*.dcm"))
@@ -53,10 +65,20 @@ class DistortionQAObj(QABot.QAObject):
             #AnalysisObj.PrintToScreen()
             self.Results=AnalysisObj.Results
             self.ScannerName = ComputeDistortion.Scanner
+            self.ThreshErrorCountsChecker = ComputeDistortion.ThreshErrorCounts
             return ComputeDistortion.ErrorMetric
 
-        res = minimize_scalar(lambda thresh: RunDist(thresh,files,self.ChosenSequence),bounds=(maxpixel*0.1,maxpixel*0.5),options = {"disp": 3,"xatol": 10,"maxiter":50})
-        if res.fun==0:
+
+
+
+        def StatusChecker(x, f, accepted):
+                print(self.ThreshErrorCountsChecker,x,f)
+                if (self.ThreshErrorCountsChecker == 0):
+                    return True
+
+        res = basinhopping(lambda thresh: RunDist(thresh,files,self.ChosenSequence),x0=maxpixel*0.2,disp=False,stepsize=200,callback=StatusChecker,interval=3)
+
+        if self.ThreshErrorCountsChecker == 0:
             self.foundThresh=True
             return self.Results
         else:

@@ -97,3 +97,80 @@ Traceback (most recent call last):
 OSError: [WinError 17] The system cannot move the file to a different disk drive: 'DistortionQA_Raigmore Hospital MRI 1_2024-12-11 14-28-53.txt' -> 'C:/Users/John/Desktop/Test - Copy\\DistortionQA_Raigmore Hospital MRI 1_2024-12-11 14-28-53\\DistortionQA_Raigmore Hospital MRI 1_2024-12-11 14-28-53.txt'
 
 
+Error logged at 2025-04-29 13:46:24
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 61, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 34, in FindFiles
+    LoadedDICOM = pydicom.read_file( DICOMFiles[0] )
+                                     ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-04-29 13:46:25
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 61, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 34, in FindFiles
+    LoadedDICOM = pydicom.read_file( DICOMFiles[0] )
+                                     ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-04-29 13:46:26
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 61, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 34, in FindFiles
+    LoadedDICOM = pydicom.read_file( DICOMFiles[0] )
+                                     ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-04-29 13:46:28
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 61, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 34, in FindFiles
+    LoadedDICOM = pydicom.read_file( DICOMFiles[0] )
+                                     ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-04-29 13:46:29
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 61, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 34, in FindFiles
+    LoadedDICOM = pydicom.read_file( DICOMFiles[0] )
+                                     ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-04-29 13:46:30
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 61, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 34, in FindFiles
+    LoadedDICOM = pydicom.read_file( DICOMFiles[0] )
+                                     ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-04-29 13:46:31
+Traceback (most recent call last):
+  File "c:\Users\Johnt\Documents\QA-Bot\QABot.py", line 61, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\Documents\QA-Bot\DistortionQA_Object.py", line 34, in FindFiles
+    LoadedDICOM = pydicom.read_file( DICOMFiles[0] )
+                                     ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+

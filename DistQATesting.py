@@ -15,16 +15,20 @@ from scipy.optimize import minimize_scalar
 import os
 import subprocess       
 
+import warnings
+warnings.filterwarnings("ignore")
 
-files = "DistortionQATest/DistortionQA_Raigmore Hospital MRI 1_2024-11-28 19-59-50"
+
+files = "DistortionQATest\DistortionQA_Raigmore Hospital MRI 2_2025-04-03 15-28-52"
 seq = "3D Sag T1 BRAVO DL"
 
 ComputeDistortion = Compute_Distortion.DistortionCalculation(files, seq) 
 maxpixel = ComputeDistortion.GetMaxPixel()
 
-
+ThreshErrorCountsChecker = None
 
 def RunDist(thresh,files,seq):
+    global ThreshErrorCountsChecker
     ComputeDistortion = Compute_Distortion.DistortionCalculation(files, seq) 
     ComputeDistortion.Threshold = thresh
     ComputeDistortion.BinariseMethod = "Constant"
@@ -33,14 +37,18 @@ def RunDist(thresh,files,seq):
     ComputeDistortion.GetDistances()
     AnalysisObj.DistortionAnalysis()
     #AnalysisObj.PrintToScreen()
-    print(ComputeDistortion.ThreshErrorCounts)
+    ThreshErrorCountsChecker = ComputeDistortion.ThreshErrorCounts
     return ComputeDistortion.ErrorMetric
 
-#res = minimize_scalar(lambda thresh: RunDist(thresh,files,seq),bounds=(maxpixel*0.1,maxpixel*0.5),options = {"disp": 3,"xatol": 10,"maxiter":50})
+#res = minimize_scalar(lambda thresh: RunDist(thresh,files,seq),bounds=(maxpixel*0.1,maxpixel*0.5),options = {"disp": 3,"xatol": 1,"maxiter":50})
 
 from scipy.optimize import basinhopping
 
-def print_fun(x, f, accepted):
-        print(x,f)
+def StatusChecker(x, f, accepted):
+        print(ThreshErrorCountsChecker,x,f)
+        if (ThreshErrorCountsChecker == 0):
+              return True
 
-res = basinhopping(lambda thresh: RunDist(thresh,files,seq),x0=maxpixel*0.2,disp=True,stepsize=200,callback=print_fun,interval=3)
+res = basinhopping(lambda thresh: RunDist(thresh,files,seq),x0=maxpixel*0.2,disp=False,stepsize=200,callback=StatusChecker,interval=3)
+
+print(res)
