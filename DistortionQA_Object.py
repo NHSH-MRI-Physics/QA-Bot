@@ -2,7 +2,7 @@ from datetime import datetime
 import QABot
 import os
 import sys
-sys.path.insert(0, os.path.join('DistortionQACode','Distortion-QA-main'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "DistortionQACode", "Distortion-QA-main"))
 import Analysis
 import Compute_Distortion
 import shutil
@@ -144,8 +144,8 @@ class DistortionQAObj(QABot.QAObject):
     def QAName(self):
         return "Distortion QA"
     
-    def RunUnitTest(self):
+    def RunUnitTest(self,path):
         current_dir = os.getcwd()
-        os.chdir(os.path.join(current_dir,"DistortionQACode","Distortion-QA-main"))
+        os.chdir(os.path.join(path,"DistortionQACode","Distortion-QA-main"))
         result = subprocess.run(["python", "-m", "unittest", "UnitTests.py"], check=True)
         os.chdir(current_dir)

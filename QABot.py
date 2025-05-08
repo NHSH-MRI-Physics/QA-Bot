@@ -175,5 +175,5 @@ class QAObject(ABC):
     
     #Run the unit tests
     @abstractmethod
-    def RunUnitTest(self):
+    def RunUnitTest(self,path):
         pass

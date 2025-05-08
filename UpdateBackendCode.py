@@ -24,10 +24,10 @@ for Name, URL in CodeBackEnds.items():
 
 import DailyQA_Object
 DailyQAObj = DailyQA_Object.DailyQAObj()
-DailyQAObj.RunUnitTest()
+DailyQAObj.RunUnitTest(Path)
 
 import DistortionQA_Object
 DistQAObj = DistortionQA_Object.DistortionQAObj()
-DistQAObj.RunUnitTest()
+DistQAObj.RunUnitTest(Path)
 
 print("All Unit Tests passed")

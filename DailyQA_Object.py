@@ -157,8 +157,8 @@ class DailyQAObj(QABot.QAObject):
     def QAName(self):
         return "Daily QA"
     
-    def RunUnitTest(self):
+    def RunUnitTest(self,path):
         current_dir = os.getcwd()
-        os.chdir(os.path.join(current_dir,"DailyQACode","DailyQA-main"))
+        os.chdir(os.path.join(path,"DailyQACode","DailyQA-main"))
         result = subprocess.run(["python", "-m", "unittest", "UnitTesting/UnitTests.py"], check=True)
         os.chdir(current_dir)
