@@ -1,0 +1,2 @@
+The QA Bot is a program desgined to watch a folder for a DICOM which matches the expected format. When a DICOM which matches is found it will be executed through the correct QA module. The results are then reported by whatever method (often email) that the specific module implements. 
+# User Guide
