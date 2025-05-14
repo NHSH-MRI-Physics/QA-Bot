@@ -35,6 +35,12 @@ QABotObj.RegisterQA(DistortionQAObj)
 QABotObj.RunBot()
 ```
 
+## Required Files 
+The following three files are requrired to be in the working directory to function. 
+- Emails.txt, a file of the emails to send results to. Each line should be of the format Name, Email
+- password.txt, this is a password file for the Gmail account to send emails from
+- qaproject-441416-f5fec0c61099.json, this is a json file which is used to authrosie the QASheets updating
+
 # Add a New Module 
 - To add a new module you must implement the QAObject located in "QABot.py"
 - 
