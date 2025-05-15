@@ -88,9 +88,7 @@ def StartQA():
     if ArchivePathVar.get() == DefaultArchiveMessage:
         tkinter.messagebox.showinfo("QA Bot Error",  "Set Archive Folder!") 
         return
-    
-    import os
-    print(os.getcwd())
+
 
     if Path("Emails.txt").is_file() == False:
         tkinter.messagebox.showinfo("Missing Files!",  "Email.txt is missing!") 
