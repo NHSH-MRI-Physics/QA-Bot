@@ -13,7 +13,7 @@ import DailyQA_Object
 import DistortionQA_Object
 ```
 
-- Initalise each of the QA Module objects and QA Bot we imported .
+- Initalise each of the QA Module objects and QA Bot we imported.
 ```
 DailyQAObj = DailyQA_Object.DailyQAObj()
 DistortionQAObj = DistortionQA_Object.DistortionQAObj()
@@ -36,11 +36,51 @@ QABotObj.RunBot()
 ```
 
 ## Required Files 
-The following three files are requrired to be in the working directory to function. 
-- Emails.txt, a file of the emails to send results to. Each line should be of the format Name, Email
-- password.txt, this is a password file for the Gmail account to send emails from
-- qaproject-441416-f5fec0c61099.json, this is a json file which is used to authrosie the QASheets updating
+The following three files are requrired to be in the working directory to function.
+- Emails.txt, a file of the emails to send results to. Each line should be of the format Name, Email.
+- password.txt, this is a password file for the Gmail account to send emails from.
+- qaproject-441416-f5fec0c61099.json, this is a json file which is used to authrosie the QASheets updating.
 
 # Add a New Module 
-- To add a new module you must implement the QAObject located in "QABot.py"
-- 
+- To add a new module you must implement the QAObject located in "QABot.py".
+The functions are explained below.
+-----
+```
+def FindFiles(self) -> dict: 
+```
+This function will search the watched folder and if any of the DICOMS match what the module expects you need to return a dictionary which shoudl contain all the data you need to run the analysis.
+
+-----
+```
+def RunAnalysis(self, files)->dict:
+    pass
+```
+This function is where the analysis is ran. The files argument is the dictonary that was provided in the FindFiles function. This returns a dictonary which should contain all the data you need to report the results. 
+
+-----
+```
+def ReportData(self,files,ResultDict):
+    pass
+```
+This function is where the data is reporting, you can make use of the google sheets or email functions to help with this. The ResultDict argument is the dictonary that was passed from the RunAnalysis function. 
+
+-----
+```
+def CleanUpFiles(self,files,ResultDict):
+    pass
+```
+This function is where the cleaning up is done for example moving files to the archive. The ResultDict argument is the dictonary that was passed from the RunAnalysis function. 
+
+-----
+```
+def QAName(self):
+    pass
+```
+This fucntion simply returns the name of the QA module
+
+-----
+```
+def RunUnitTest(self,path):
+    pass
+```
+When the backend code is updated the unit tests for each module are ran to confirm everything is working as expected. This function will run the appioirate unit tests of each module. 
