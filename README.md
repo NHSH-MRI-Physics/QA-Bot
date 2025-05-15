@@ -41,6 +41,9 @@ The following three files are requrired to be in the working directory to functi
 - password.txt, this is a password file for the Gmail account to send emails from.
 - qaproject-441416-f5fec0c61099.json, this is a json file which is used to authrosie the QASheets updating.
 
+# Make a new release
+To make a new release of the QA Bot you should run the SetupPyinstalerMac.sh script. This will also run the unit tests, the final package will be loacted in PyInstaller/QABot.tar
+
 # Add a New Module 
 - To add a new module you must implement the QAObject located in "QABot.py".
 The functions are explained below.
