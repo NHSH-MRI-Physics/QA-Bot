@@ -11,6 +11,7 @@ pyinstaller GUI.py --distpath "PyInstaller" -n "QA Bot"  \
 
 python UpdateBackendCode.py PyInstaller/QA\ Bot
 cp Emails.txt PyInstaller/QA\ Bot/Emails.txt
+cp -R NameDatabase PyInstaller/QA\ Bot
 cd PyInstaller
 mv QA\ Bot/DailyQACode QA\ Bot/_internal 
 mv QA\ Bot/DistortionQACode QA\ Bot/_internal

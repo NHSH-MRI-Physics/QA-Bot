@@ -7,6 +7,8 @@ import QA_Bot_Helper
 import glob
 from pathlib import Path
 from enum import Enum
+import pydicom
+import csv
 
 #These global variables are the settings, it could probably be done alot better
 DICOMFolder = "/Users/mri/Documents/QA/ClinicalQA/RawDICOM"
@@ -33,6 +35,7 @@ class QABot:
         self.KeepRunning=True
         self.CurrentlyRunning=False
         self.__Status = QABotState.Idle
+        self.CheckDICOMForName = True
         
         if not os.path.exists(ArchivePath):
             os.makedirs(ArchivePath)
@@ -43,6 +46,28 @@ class QABot:
     def RegisterQA(self,QAObj):
         #Function where you pass a QAObject to register it 
         self.QAObjects.append(QAObj)
+
+    def CheckDICOMHasRealName(self,filesDict):
+        if "folder" not in filesDict:
+            raise Exception("No folder found in the filesDict")
+        folder = filesDict["folder"]
+        file = glob.glob( os.path.join( folder,"*.dcm"))[0]
+        LoadedDICOM = pydicom.read_file( file )
+        FirstName = LoadedDICOM[0x10,0x0010].value.given_name
+        Surname = LoadedDICOM[0x10,0x0010].value.family_name
+
+        FirstNameFile = open(os.path.join("NameDatabase","FirstNames.csv"), 'r')
+        reader = csv.reader(FirstNameFile)
+        for row_number, row in enumerate(reader, start=1):
+            if FirstName == row[2]:
+                raise Exception("First name in DICOM was found in the database, please check the file")
+        
+        SurNameFile = open(os.path.join("NameDatabase","SurNames.csv"), 'r')
+        reader = csv.reader(SurNameFile)
+        for row_number, row in enumerate(reader, start=1):
+            if Surname == row[2]:
+                raise Exception("Surname in DICOM was found in the database, please check the file")
+                
 
     def RunBot(self):
         #Iterate over all QA Objects calling the method which checks for any releavent files, this method will then return the file(s) that are releavent 
@@ -74,6 +99,8 @@ class QABot:
 
                     try:
                         self.__Status = QABotState.Reporting
+                        if self.CheckDICOMForName == True:
+                            self.CheckDICOMHasRealName(filesDict)
                         QAObj.ReportData(filesDict,ResultDict)
                     except Exception as e:
                         self.ShowError(e,"Report Data",QAObj)

@@ -376,3 +376,119 @@ Traceback (most recent call last):
 FileNotFoundError: [WinError 2] The system cannot find the file specified
 
 
+Error logged at 2025-05-15 14:31:32
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 105, in RunBot
+    self.CheckDICOMHasRealName(filesDict)
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 63, in CheckDICOMHasRealName
+    raise Exception("First name in DICOM was found in the database, please check the file")
+Exception: First name in DICOM was found in the database, please check the file
+
+
+Error logged at 2025-05-15 14:31:34
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 112, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "/Users/john/Documents/QA-Bot/DailyQA_Object.py", line 150, in CleanUpFiles
+    shutil.move(folder, self.ArchiveFolder)
+  File "/opt/anaconda3/envs/QABot/lib/python3.10/shutil.py", line 802, in move
+    if os.path.isdir(dst):
+  File "/opt/anaconda3/envs/QABot/lib/python3.10/genericpath.py", line 42, in isdir
+    st = os.stat(s)
+TypeError: stat: path should be string, bytes, os.PathLike or integer, not NoneType
+
+
+Error logged at 2025-05-15 14:34:38
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 103, in RunBot
+    self.CheckDICOMHasRealName(filesDict)
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 63, in CheckDICOMHasRealName
+    raise Exception("First name in DICOM was found in the database, please check the file")
+Exception: First name in DICOM was found in the database, please check the file
+
+
+Error logged at 2025-05-15 14:38:02
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 96, in RunBot
+    ResultDict = QAObj.RunAnalysis(filesDict)
+  File "/Users/john/Documents/QA-Bot/DailyQA_Object.py", line 48, in RunAnalysis
+    self.ArchiveFolder = "DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S"))
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+
+Error logged at 2025-05-15 14:38:02
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 103, in RunBot
+    self.CheckDICOMHasRealName(filesDict)
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 63, in CheckDICOMHasRealName
+    raise Exception("First name in DICOM was found in the database, please check the file")
+Exception: First name in DICOM was found in the database, please check the file
+
+
+Error logged at 2025-05-15 14:38:02
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 110, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "/Users/john/Documents/QA-Bot/DailyQA_Object.py", line 152, in CleanUpFiles
+    Results = ResultDict["Results"]
+TypeError: 'NoneType' object is not subscriptable
+
+
+Error logged at 2025-05-15 14:43:27
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 96, in RunBot
+    ResultDict = QAObj.RunAnalysis(filesDict)
+  File "/Users/john/Documents/QA-Bot/DailyQA_Object.py", line 48, in RunAnalysis
+    self.ArchiveFolder = "DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S"))
+AttributeError: 'NoneType' object has no attribute 'strftime'
+
+
+Error logged at 2025-05-15 14:43:27
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 103, in RunBot
+    self.CheckDICOMHasRealName(filesDict)
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 63, in CheckDICOMHasRealName
+    raise Exception("First name in DICOM was found in the database, please check the file")
+Exception: First name in DICOM was found in the database, please check the file
+
+
+Error logged at 2025-05-15 14:48:15
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 103, in RunBot
+    self.CheckDICOMHasRealName(filesDict)
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 63, in CheckDICOMHasRealName
+    raise Exception("First name in DICOM was found in the database, please check the file")
+Exception: First name in DICOM was found in the database, please check the file
+
+
+Error logged at 2025-05-15 14:48:22
+Traceback (most recent call last):
+  File "/opt/anaconda3/envs/QABot/lib/python3.10/shutil.py", line 816, in move
+    os.rename(src, real_dst)
+FileNotFoundError: [Errno 2] No such file or directory: 'Results_DailyQA_DQA_Head_2025-05-15_14-48-10.txt' -> 'Archive/DailyQA_DQA_Head_2025-05-15 14-48-10/Results_DailyQA_DQA_Head_2025-05-15_14-48-10.txt'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 110, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "/Users/john/Documents/QA-Bot/DailyQA_Object.py", line 161, in CleanUpFiles
+    shutil.move("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
+  File "/opt/anaconda3/envs/QABot/lib/python3.10/shutil.py", line 836, in move
+    copy_function(src, real_dst)
+  File "/opt/anaconda3/envs/QABot/lib/python3.10/shutil.py", line 434, in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/opt/anaconda3/envs/QABot/lib/python3.10/shutil.py", line 254, in copyfile
+    with open(src, 'rb') as fsrc:
+FileNotFoundError: [Errno 2] No such file or directory: 'Results_DailyQA_DQA_Head_2025-05-15_14-48-10.txt'
+
+
+Error logged at 2025-05-15 14:57:46
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 103, in RunBot
+    self.CheckDICOMHasRealName(filesDict)
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 63, in CheckDICOMHasRealName
+    raise Exception("First name in DICOM was found in the database, please check the file")
+Exception: First name in DICOM was found in the database, please check the file
+
+

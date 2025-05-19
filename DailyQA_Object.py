@@ -43,7 +43,17 @@ class DailyQAObj(QABot.QAObject):
     def RunAnalysis(self, files):
         print("Running: " + files["QAName"])
         Results = DailyQA.RunDailyQA(files["folder"])
+        
+        QAName = files["QAName"]
+
+        #This gets overwritten in the report data function, its just to allow us to archive incase it doenst make that far.
+        self.date = datetime.datetime.now()
+        self.ArchiveFolder = "DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S"))
+        self.ArchiveFolder = self.ArchiveFolder.replace("Users", QAName)
+        self.ArchiveFolder = os.path.join(QABot.ArchivePath,self.ArchiveFolder)
+
         self.QASuccess = True
+
         return {"Results": Results}        
     
     def ReportData(self, files, ResultDict):
@@ -148,7 +158,8 @@ class DailyQAObj(QABot.QAObject):
         #Move to the archive 
         os.system("echo ilovege | sudo -S chown mri "+folder)
         shutil.move(folder, self.ArchiveFolder)
-        shutil.move("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
+        if os.path.exists("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"):
+            shutil.move("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
         if (self.QASuccess==True):
             for result in Results:
                 if (hasattr(sys, '_MEIPASS')): #if true its being run in pyinstaller
