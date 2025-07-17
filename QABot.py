@@ -36,6 +36,7 @@ class QABot:
         self.CurrentlyRunning=False
         self.__Status = QABotState.Idle
         self.CheckDICOMForName = True
+        self.ErrorCountSinceLastSuccesfulRun = 0 #This is a variable which counts up each timer an error is reports, it resets to 0 each time a QA is successfully run.
         
         if not os.path.exists(ArchivePath):
             os.makedirs(ArchivePath)
@@ -80,13 +81,24 @@ class QABot:
             filesDict = None
             self.__Status = QABotState.Idle #Reset it back to idle each time...
             ResultDict=None
+
+            if self.ErrorCountSinceLastSuccesfulRun > 5:
+                print("Error count since last succesful run is greater than 5, stopping the bot")
+                self.KeepRunning=False
+                self.CurrentlyRunning=False
+                return
+            
+            ErrorProduced  = False
             for QAObj in self.QAObjects:
+                
+
                 try:
                     self.__Status = QABotState.FindingFiles
                     filesDict = QAObj.FindFiles()
                     self.__Status = QABotState.Idle
                 except Exception as e:
                     self.ShowError(e,"Find Files",QAObj)
+                    ErrorProduced=True
             
                 if filesDict != None:
                     print("Running QA : " + QAObj.QAName())
@@ -96,6 +108,7 @@ class QABot:
                         ResultDict = QAObj.RunAnalysis(filesDict)
                     except Exception as e:
                         self.ShowError(e,"Run Analysis",QAObj)
+                        ErrorProduced=True
 
                     try:
                         self.__Status = QABotState.Reporting
@@ -104,12 +117,14 @@ class QABot:
                         QAObj.ReportData(filesDict,ResultDict)
                     except Exception as e:
                         self.ShowError(e,"Report Data",QAObj)
+                        ErrorProduced=True
 
                     try:
                         self.__Status = QABotState.Cleanup
                         QAObj.CleanUpFiles(filesDict,ResultDict)
                     except Exception as e:
                         self.ShowError(e,"Clean Up Files",QAObj)
+                        ErrorProduced=True
 
                 self.__Status = QABotState.Idle
 
@@ -134,15 +149,21 @@ class QABot:
                     if DoBackUp==True:
                         QA_Bot_Helper.BackUpGoogleSheet()
                 except Exception as e:
-
                     TEXT=""
                     TEXT+= "An error occured during the google sheet backup process \n\n"
                     TEXT+="Error:\n"
                     TEXT+=str(e)+"\n\n"
                     subject = "QABot: Google sheets back up error"
+                    print(TEXT)
                     QA_Bot_Helper.SendEmail(TEXT,subject)
-                    
+
+            if ErrorProduced == False:
+                self.ErrorCountSinceLastSuccesfulRun = 0
+            else:
+                self.ErrorCountSinceLastSuccesfulRun += 1
+                
             time.sleep(self.IterationTime)
+            #self.ErrorCountSinceLastSuccesfulRun = 0 
         self.CurrentlyRunning=False
         print ("QA Bot Succesfully Stopped")
 
@@ -165,7 +186,6 @@ class QABot:
         f.write("Error logged at " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") +"\n")
         f.write(traceback.format_exc())
         f.write("\n\n")
-
         QA_Bot_Helper.SendEmail(TEXT,subject)
         pass      
 
