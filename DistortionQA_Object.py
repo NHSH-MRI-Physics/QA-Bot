@@ -49,8 +49,12 @@ class DistortionQAObj(QABot.QAObject):
                 LoadedDICOM = pydicom.read_file( DICOMFiles[0] )
                 if LoadedDICOM.SeriesDescription in self.sequence:
                     self.ChosenSequence = LoadedDICOM.SeriesDescription
+                    ds = pydicom.read_file( DICOMFiles[0] )
+                    acq_date = ds.get("AcquisitionDate", None)   # Format: YYYYMMDD
+                    acq_time = ds.get("AcquisitionTime", None)   # Format: HHMMSS.frac
+                    self.Date = datetime.strptime(acq_date + acq_time, "%Y%m%d%H%M%S")
                     return {"folder": folder}
-                    
+                
 
 
     def RunAnalysis(self, files):
@@ -101,7 +105,8 @@ class DistortionQAObj(QABot.QAObject):
         else:
             TEXT+= "Max Interplate Distortion: Run Code Manually\n"
             TEXT+= "Max Intraplate Distortion: Run Code Manually\n"
-        self.Date = str(datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
+        self.Date = str(self.Date.strftime("%Y-%m-%d %H-%M-%S"))
+
         self.ArchiveFolder = os.path.join(QABot.ArchivePath,"DistortionQA_"+self.ScannerName+"_"+self.Date)
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
 

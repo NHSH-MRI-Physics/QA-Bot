@@ -22,6 +22,7 @@ class DailyQAObj(QABot.QAObject):
         self.date=None
         self.overallpass = []
         self.SNRResult=None
+        self.DICOMDateTIme = None
 
     def FindFiles(self):
         FileCount =  {}
@@ -38,7 +39,7 @@ class DailyQAObj(QABot.QAObject):
                         LoadedDICOM = pydicom.read_file( file )
                         self.scanername =LoadedDICOM[0x08,0x80].value.split(" ")[-2]  + " " + LoadedDICOM[0x08,0x80].value.split(" ")[-1]
                         return {"folder":folder , "QAName":QAName}
-
+                
 
     def RunAnalysis(self, files):
         print("Running: " + files["QAName"])
@@ -46,13 +47,22 @@ class DailyQAObj(QABot.QAObject):
         
         QAName = files["QAName"]
 
+
+        DICOMFiles = glob.glob( os.path.join( files["folder"]+"/*.dcm"))
+        ds = pydicom.read_file( DICOMFiles[0] )
+        acq_date = ds.get("AcquisitionDate", None)   # Format: YYYYMMDD
+        acq_time = ds.get("AcquisitionTime", None)   # Format: HHMMSS.frac
+        self.date = datetime.datetime.strptime(acq_date + acq_time, "%Y%m%d%H%M%S")
+
+        self.QASuccess = True
+
         #This gets overwritten in the report data function, its just to allow us to archive incase it doenst make that far.
-        self.date = datetime.datetime.now()
+        #self.date = datetime.datetime.now()
         self.ArchiveFolder = "DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S"))
         self.ArchiveFolder = self.ArchiveFolder.replace("Users", QAName)
         self.ArchiveFolder = os.path.join(QABot.ArchivePath,self.ArchiveFolder)
+        
 
-        self.QASuccess = True
 
         return {"Results": Results}        
     
@@ -77,7 +87,7 @@ class DailyQAObj(QABot.QAObject):
                 else:
                     images.append(os.path.join("DailyQACode","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"))
             self.overallpass = OverallPass
-            self.date = datetime.datetime.now()
+            #self.date = datetime.datetime.now()
         
             TEXT = ""
             if False in OverallPass:
@@ -153,7 +163,6 @@ class DailyQAObj(QABot.QAObject):
         folder = files["folder"]
         QAName = files["QAName"]
         Results = ResultDict["Results"]
-
 
         #Move to the archive 
         os.system("echo ilovege | sudo -S chown mri "+folder)
