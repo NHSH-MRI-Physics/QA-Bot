@@ -127,13 +127,14 @@ class QABot:
                         ErrorProduced=True
 
                 self.__Status = QABotState.Idle
-
+                ErrorFiles = []
                 try:
                     DoBackUp=False
                     if not os.path.exists("Sheets_Backup"):
                         DoBackUp=True
                     else:
                         files = glob.glob(os.path.join("Sheets_Backup",'*.csv'))
+                        
                         if len(files) == 0:
                             DoBackUp=True
                         else:
@@ -141,6 +142,10 @@ class QABot:
                             for file in files:
                                 date = file.split()[2].split("-")
                                 dates.append( datetime.datetime( int(date[0]), int(date[1]), int(date[2])) )
+
+                                if "BackupError" in file:
+                                    ErrorFiles.append(file)
+
                             dates = sorted(dates)
                             latestdate = dates[-1]
                             if datetime.datetime.now() > latestdate+datetime.timedelta(days=1):
@@ -148,6 +153,10 @@ class QABot:
                     
                     if DoBackUp==True:
                         QA_Bot_Helper.BackUpGoogleSheet()
+
+                        for file in ErrorFiles:
+                            os.remove(file)
+
                 except Exception as e:
                     TEXT=""
                     TEXT+= "An error occured during the google sheet backup process \n\n"
@@ -155,7 +164,15 @@ class QABot:
                     TEXT+=str(e)+"\n\n"
                     subject = "QABot: Google sheets back up error"
                     print(TEXT)
-                    QA_Bot_Helper.SendEmail(TEXT,subject)
+
+                    #Make an empty file so the bot can read the date from..
+                    f = open(os.path.join("Sheets_Backup", "Sheets BackupError " + str(datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S"))+".csv"),'w')
+                    f.close()
+                    try:
+                        QA_Bot_Helper.SendEmail(TEXT,subject)
+                    except Exception as e:
+                        print("         Error: Failed to send email with error message")
+                        print("         Error: " + str(e))
 
             if ErrorProduced == False:
                 self.ErrorCountSinceLastSuccesfulRun = 0
@@ -186,7 +203,11 @@ class QABot:
         f.write("Error logged at " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") +"\n")
         f.write(traceback.format_exc())
         f.write("\n\n")
-        QA_Bot_Helper.SendEmail(TEXT,subject)
+        try:
+            QA_Bot_Helper.SendEmail(TEXT,subject)
+        except Exception as e:
+            print("         Error: Failed to send email with error message")
+            print("         Error: " + str(e))
         pass      
 
 
