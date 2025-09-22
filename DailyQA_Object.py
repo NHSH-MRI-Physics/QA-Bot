@@ -109,9 +109,16 @@ class DailyQAObj(QABot.QAObject):
 
             NumberOfFilesLastRun = int(np.load("temp.npy"))
             TimePerImage = 0.028
+            print("Updating Man Hours")
             QA_Bot_Helper.UpdateTotalManHours(TimePerImage*NumberOfFilesLastRun)
+            print("Finished updating man hours")
+            
             TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
+
+            print("Sending Email")
             QA_Bot_Helper.SendEmail(TEXT,subject,images)
+            print("Finished Sending Email")
+
 
             #Fill out spreadsheet
             for i in range(len(self.QAResult)):
@@ -131,7 +138,10 @@ class DailyQAObj(QABot.QAObject):
                 for j in range(5): 
                     for k in range(len(self.SNRResult[i][1]["M1"])):
                         Values.append(self.SNRResult[i][1][ROIS[j]][k])
+
+                print("Updating Google Sheet")
                 QA_Bot_Helper.UpdateGoogleSheet("DailyQA",Values)
+                print("Finished updating Google Sheet")
                 
                 f = open("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",'w')
                 f.write("Date: "+str(self.date.strftime("%Y-%m-%d %H-%M-%S")) + "\n")
