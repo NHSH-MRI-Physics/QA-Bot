@@ -492,3 +492,39 @@ Traceback (most recent call last):
 Exception: First name in DICOM was found in the database, please check the file
 
 
+Error logged at 2025-10-30 18:21:08
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 97, in RunBot
+    filesDict = QAObj.FindFiles()
+  File "/Users/john/Documents/QA-Bot/MedACRQA_Object.py", line 48, in FindFiles
+    self.Date = datetime.strptime(acq_date + acq_time, "%Y%m%d%H%M%S")
+AttributeError: module 'datetime' has no attribute 'strptime'
+
+
+Error logged at 2025-10-30 21:24:33
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 124, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "/Users/john/Documents/QA-Bot/MedACRQA_Object.py", line 74, in CleanUpFiles
+    os.remove(self.TempResults)
+PermissionError: [Errno 1] Operation not permitted: 'MedACRFrameworkCode/Scottish-Medium-ACR-Analysis-Framework-main/TempResults'
+
+
+Error logged at 2025-10-30 21:26:13
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 124, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "/Users/john/Documents/QA-Bot/MedACRQA_Object.py", line 74, in CleanUpFiles
+    os.rmdir(self.TempResults)
+OSError: [Errno 66] Directory not empty: 'MedACRFrameworkCode/Scottish-Medium-ACR-Analysis-Framework-main/TempResults'
+
+
+Error logged at 2025-10-30 21:55:35
+Traceback (most recent call last):
+  File "/Users/john/Documents/QA-Bot/QABot.py", line 117, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "/Users/john/Documents/QA-Bot/MedACRQA_Object.py", line 82, in ReportData
+    self.ArchiveFolder = os.path.join(QABot.ArchivePath,"MedACR_"+self.scannerName+"_"+self.Date)
+TypeError: can only concatenate str (not "datetime.datetime") to str
+
+

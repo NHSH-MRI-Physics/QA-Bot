@@ -8,6 +8,8 @@ import QABot
 import gspread
 from datetime import datetime
 import glob
+from threading import Thread
+import time
 
 def SendEmail(TextBody,subject,AttachmentImages=None):
     if QABot.SendEmails == False:
@@ -16,7 +18,14 @@ def SendEmail(TextBody,subject,AttachmentImages=None):
         print("subject:" + str(subject))
         print(TextBody)
         return
-
+    SuccessfullySentMail = [False]
+    t1 = Thread(target=SendTheEmail,daemon=True,args=(TextBody,subject,AttachmentImages,SuccessfullySentMail))
+    t1.start()
+    t1.join(10)
+    if SuccessfullySentMail[0] == False:
+        print("Email sending is taking too long, terminating thread and continuing")
+    
+def SendTheEmail(TextBody,subject,AttachmentImages=None,SuccessfullySentMail = False):
     UserName = "raigmoremri@gmail.com"
     file = open('Password.txt',mode='r')
     Password = file.read()
@@ -47,6 +56,7 @@ def SendEmail(TextBody,subject,AttachmentImages=None):
             s.starttls()
             s.login(UserName, Password)
             s.send_message(msg)
+    SuccessfullySentMail[0]=True
 
 def GetTotalManHoursSaved():
     gc = gspread.service_account(filename=QABot.GoogleSheetJSON)
