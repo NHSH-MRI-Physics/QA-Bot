@@ -61,28 +61,33 @@ class MedACRQAObj(QABot.QAObject):
         MedACR_ToleranceTableChecker.SetUpToleranceTable("MedACRFrameworkCode/Scottish-Medium-ACR-Analysis-Framework-main/ToleranceTable/ToleranceTable_90mmPeg.xml")
         
         Path(self.TempResults).mkdir(parents=True, exist_ok=True)
-        Seq = self.Sequences[0]
         MedACRAnalysis.GeoMethod=GeometryOptions.MAGNETMETHOD
         MedACRAnalysis.SpatialResMethod=ResOptions.ContrastResponseMethod
         MedACRAnalysis.UniformityMethod = UniformityOptions.ACRMETHOD
 
         Results=[]
         for sequence in self.Sequences:
-            MedACRAnalysis.RunAnalysis(Seq,files["folder"],self.TempResults,RunAll=True, RunSNR=True, RunGeoAcc=True, RunSpatialRes=True, RunUniformity=True, RunGhosting=True, RunSlicePos=True, RunSliceThickness=True)
+            MedACRAnalysis.RunAnalysis(sequence,files["folder"],self.TempResults,RunAll=True, RunSNR=True, RunGeoAcc=True, RunSpatialRes=True, RunUniformity=True, RunGhosting=True, RunSlicePos=True, RunSliceThickness=True)
             ResultsText = MedACRAnalysis.ReportText
             Results.append(ResultsText)
         return {"Results": Results}
     
     def ReportData(self, files, ResultDict):
         images = None
+        import fnmatch
+
+        images = [os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(self.TempResults) for f in fnmatch.filter(files, '*.png')] #EMail attachment need names
+
         TEXT = ""
         for result in ResultDict["Results"]:
-            TEXT += result + "\n\n"
+            TEXT += result + "\n\n-------------------------------------------------------------------------------------------------------------\n\n"
         subject = "QABot: Medium ACR QA Results for " + self.scannerName + " on " + self.Date.strftime("%Y-%m-%d %H:%M:%S")
         self.ArchiveFolder = os.path.join(QABot.ArchivePath,"MedACR_"+self.scannerName+"_"+self.Date.strftime("%Y-%m-%d %H:%M:%S"))
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
         QA_Bot_Helper.UpdateTotalManHours(5)
         QA_Bot_Helper.SendEmail(TEXT,subject,images)
+
+        x = 0
 
     def CleanUpFiles(self, files, ResultDict):
         shutil.rmtree(self.TempResults)
