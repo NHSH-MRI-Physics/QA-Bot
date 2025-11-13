@@ -528,3 +528,93 @@ Traceback (most recent call last):
 TypeError: can only concatenate str (not "datetime.datetime") to str
 
 
+Error logged at 2025-11-13 12:16:05
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 117, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\MedACRQA_Object.py", line 99, in ReportData
+    data = pickle.load(newest_docx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: file must have 'read' and 'readline' attributes
+
+
+Error logged at 2025-11-13 13:19:56
+Traceback (most recent call last):
+  File "c:\Users\Johnt\anaconda3\envs\QABot\Lib\shutil.py", line 853, in move
+    os.rename(src, real_dst)
+OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'MedACRFrameworkCode\\Scottish-Medium-ACR-Analysis-Framework-main\\TempResults' -> 'Archive\\MedACR_MRI1_2025-09-25 18:20:20'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 124, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\MedACRQA_Object.py", line 198, in CleanUpFiles
+    shutil.move(self.TempResults, self.ArchiveFolder)
+  File "c:\Users\Johnt\anaconda3\envs\QABot\Lib\shutil.py", line 869, in move
+    copytree(src, real_dst, copy_function=copy_function,
+  File "c:\Users\Johnt\anaconda3\envs\QABot\Lib\shutil.py", line 573, in copytree
+    return _copytree(entries=entries, src=src, dst=dst, symlinks=symlinks,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\Johnt\anaconda3\envs\QABot\Lib\shutil.py", line 471, in _copytree
+    os.makedirs(dst, exist_ok=dirs_exist_ok)
+  File "c:\Users\Johnt\anaconda3\envs\QABot\Lib\os.py", line 225, in makedirs
+    mkdir(name, mode)
+OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'Archive\\MedACR_MRI1_2025-09-25 18:20:20'
+
+
+Error logged at 2025-11-13 13:23:06
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 124, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\MedACRQA_Object.py", line 199, in CleanUpFiles
+    os.makedirs(self.ArchiveFolder)
+  File "c:\Users\Johnt\anaconda3\envs\QABot\Lib\os.py", line 225, in makedirs
+    mkdir(name, mode)
+OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'Archive\\MedACR_MRI1_2025-09-25 18:20:20'
+
+
+Error logged at 2025-11-13 13:26:00
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 124, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\MedACRQA_Object.py", line 198, in CleanUpFiles
+    Path(self.ArchiveFolder).mkdir(parents=True, exist_ok=True)
+  File "c:\Users\Johnt\anaconda3\envs\QABot\Lib\pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+OSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'Archive\\MedACR_MRI1_2025-09-25 18:20:20'
+
+
+Error logged at 2025-11-13 13:46:57
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 97, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Johnt\Documents\QA-Bot\MedACRQA_Object.py", line 49, in FindFiles
+    ds = pydicom.read_file( DICOMFiles[0] )
+                            ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-11-13 13:47:10
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 97, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Johnt\Documents\QA-Bot\MedACRQA_Object.py", line 49, in FindFiles
+    ds = pydicom.read_file( DICOMFiles[0] )
+                            ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+
+Error logged at 2025-11-13 13:47:50
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 97, in RunBot
+    filesDict = QAObj.FindFiles()
+                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Johnt\Documents\QA-Bot\MedACRQA_Object.py", line 49, in FindFiles
+    ds = pydicom.read_file( DICOMFiles[0] )
+                            ~~~~~~~~~~^^^
+IndexError: list index out of range
+
+

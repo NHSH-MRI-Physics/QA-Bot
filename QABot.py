@@ -90,8 +90,6 @@ class QABot:
             
             ErrorProduced  = False
             for QAObj in self.QAObjects:
-                
-
                 try:
                     self.__Status = QABotState.FindingFiles
                     filesDict = QAObj.FindFiles()

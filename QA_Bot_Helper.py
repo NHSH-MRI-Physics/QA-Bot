@@ -51,7 +51,7 @@ def SendTheEmail(TextBody,subject,AttachmentImages=None,SuccessfullySentMail = F
             for file in AttachmentImages:
                 with open(file, 'rb') as fp:
                     img_data = fp.read()
-                msg.add_attachment(img_data, maintype='image',subtype='png')
+                msg.add_attachment(img_data, maintype='image',subtype='png',filename=os.path.basename(file))
         with smtplib.SMTP('smtp.gmail.com', 587) as s:
             s.starttls()
             s.login(UserName, Password)

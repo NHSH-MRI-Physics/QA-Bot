@@ -8,8 +8,11 @@ import os
 list_dir = os.listdir(os.path.join(os.getcwd(),"Archive"))
 
 for folder in list_dir:
-    if folder.startswith("DailyQA") or folder.startswith("DistortionQA") or folder.startswith("MedACRQA"):
+    if folder.startswith("DailyQA") or folder.startswith("DistortionQA"):
         shutil.move(os.path.join(os.getcwd(),"Archive",folder), os.path.join(os.getcwd(),"WatchFolder",folder))
+    if folder.startswith("MedACRQA"):
+        shutil.move(os.path.join(os.getcwd(),"Archive",folder,"DICOMS"), os.path.join(os.getcwd(),"WatchFolder",folder))
+        shutil.rmtree(os.path.join(os.getcwd(),"Archive",folder))
 
 DailyQAObj = DailyQA_Object.DailyQAObj()
 DistortionQAObj = DistortionQA_Object.DistortionQAObj()
@@ -18,7 +21,7 @@ MedACRQAObj = MedACRQA_Object.MedACRQAObj()
 QABotObj = QABot.QABot()
 QABotObj.IterationTime=10
 QABot.DICOMFolder = "WatchFolder"
-QABot.SendEmails=True
+QABot.SendEmails=False
 QABot.UpdateGoogleSheet=False
 QABotObj.RegisterQA(DailyQAObj)
 QABotObj.RegisterQA(DistortionQAObj)
