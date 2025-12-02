@@ -143,29 +143,34 @@ class DailyQAObj(QABot.QAObject):
                 QA_Bot_Helper.UpdateGoogleSheet("DailyQA",Values)
                 print("Finished updating Google Sheet")
                 
-                f = open("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",'w')
-                f.write("Date: "+str(self.date.strftime("%Y-%m-%d %H-%M-%S")) + "\n")
-                f.write(QAName+"\n")
-                f.write("Overall Result: ")
-                if self.QAResult[i][0] == True:
-                    f.write("Pass"+"\n")
+                
+            f = open("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",'w')
+            f.write("Date: "+str(self.date.strftime("%Y-%m-%d %H-%M-%S")) + "\n")
+            f.write(QAName+"\n")
+            f.write("Overall Result: ")
+            if True in OverallPass:
+                f.write("Pass"+"\n")
+            else:
+                f.write("Fail"+"\n")
+            f.write("Scanner: " + self.scanername+"\n")
+            f.write("Archive Folder: " + self.ArchiveFolder+"\n")
+            f.write("\n\n")
+            for sequenceID in range(len(self.SNRResult)):
+                f.write("\tSequence: " + self.SNRResult[sequenceID][3] + "\n")
+                if self.QAResult[sequenceID][0]==True:
+                    f.write("\tSequence Result: Pass\n")
                 else:
-                    f.write("Fail"+"\n")
-                f.write("Scanner: " + self.scanername+"\n")
-                f.write("Archive Folder: " + self.ArchiveFolder+"\n")
+                    f.write("\tSequence Result: Fail\n")
+                for SliceNum in range(len(self.SNRResult[sequenceID][1]["M1"])):
+                    f.write("\tSlice Number: " + str(SliceNum+1) + "\n")
+                    f.write("\t\tM1: " + str(self.SNRResult[sequenceID][1]["M1"][SliceNum]) + "\n")
+                    f.write("\t\tM2: " + str(self.SNRResult[sequenceID][1]["M2"][SliceNum]) + "\n")
+                    f.write("\t\tM3: " + str(self.SNRResult[sequenceID][1]["M3"][SliceNum]) + "\n")
+                    f.write("\t\tM4: " + str(self.SNRResult[sequenceID][1]["M4"][SliceNum]) + "\n")
+                    f.write("\t\tM5: " + str(self.SNRResult[sequenceID][1]["M5"][SliceNum]) + "\n")
+                    f.write("\n")
                 f.write("\n\n")
-                for sequenceID in range(len(self.SNRResult)):
-                    f.write("\tSequence: " + self.SNRResult[sequenceID][3] + "\n")
-                    for SliceNum in range(len(self.SNRResult[sequenceID][1]["M1"])):
-                        f.write("\tSlice Number: " + str(SliceNum+1) + "\n")
-                        f.write("\t\tM1: " + str(self.SNRResult[sequenceID][1]["M1"][SliceNum]) + "\n")
-                        f.write("\t\tM2: " + str(self.SNRResult[sequenceID][1]["M2"][SliceNum]) + "\n")
-                        f.write("\t\tM3: " + str(self.SNRResult[sequenceID][1]["M3"][SliceNum]) + "\n")
-                        f.write("\t\tM4: " + str(self.SNRResult[sequenceID][1]["M4"][SliceNum]) + "\n")
-                        f.write("\t\tM5: " + str(self.SNRResult[sequenceID][1]["M5"][SliceNum]) + "\n")
-                        f.write("\n")
-                    f.write("\n\n")
-                f.close()
+            f.close()
 
 
     def CleanUpFiles(self, files, ResultDict):

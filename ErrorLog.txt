@@ -618,3 +618,53 @@ Traceback (most recent call last):
 IndexError: list index out of range
 
 
+Error logged at 2025-12-02 10:21:16
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 115, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 160, in ReportData
+    f.write("\tSequence Result: " + ("Pass" if self.QAResult[sequenceID][0][0]==True else "Fail") + "\n")
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+TypeError: 'bool' object is not subscriptable
+
+
+Error logged at 2025-12-02 10:22:01
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 115, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 160, in ReportData
+    f.write("\tSequence Result: " + ("Pass" if self.QAResult[sequenceID][0][0]==True else "Fail") + "\n")
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+TypeError: 'bool' object is not subscriptable
+
+
+Error logged at 2025-12-02 10:24:27
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 115, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 160, in ReportData
+    if self.QAResult[sequenceID][0][0]==True:
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+TypeError: 'bool' object is not subscriptable
+
+
+Error logged at 2025-12-02 10:25:12
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 115, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 160, in ReportData
+    if self.QAResult[sequenceID][0][0]==True:
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+TypeError: 'bool' object is not subscriptable
+
+
+Error logged at 2025-12-02 10:26:54
+Traceback (most recent call last):
+  File "C:\Users\Johnt\Documents\QA-Bot\QABot.py", line 115, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "C:\Users\Johnt\Documents\QA-Bot\DailyQA_Object.py", line 160, in ReportData
+    if self.QAResult[sequenceID][0][0]==True:
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+TypeError: 'bool' object is not subscriptable
+
+
