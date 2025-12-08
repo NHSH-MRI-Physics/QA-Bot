@@ -15,5 +15,6 @@ cp -R NameDatabase PyInstaller/QA\ Bot
 cd PyInstaller
 mv QA\ Bot/DailyQACode QA\ Bot/_internal 
 mv QA\ Bot/DistortionQACode QA\ Bot/_internal
+mv QA\ Bot/MedACRFrameworkCode QA\ Bot/_internal
 tar czf QABot.tar QA\ Bot
 cd ..
