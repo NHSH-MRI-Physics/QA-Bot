@@ -9,6 +9,7 @@ from pathlib import Path
 from enum import Enum
 import pydicom
 import csv
+import traceback
 
 #These global variables are the settings, it could probably be done alot better
 DICOMFolder = "/Users/mri/Documents/QA/ClinicalQA/RawDICOM"
@@ -81,21 +82,32 @@ class QABot:
             filesDict = None
             self.__Status = QABotState.Idle #Reset it back to idle each time...
             ResultDict=None
+            
+            if self.ErrorCountSinceLastSuccesfulRun > 0:
+                print("Error count since last succesful run: " + str(self.ErrorCountSinceLastSuccesfulRun))
 
             if self.ErrorCountSinceLastSuccesfulRun > 5:
-                print("Error count since last succesful run is greater than 5, stopping the bot")
+                print("Error count since last succesful run is greater than 5, stopping the bot. Restart the program to continue.")
                 self.KeepRunning=False
                 self.CurrentlyRunning=False
+
+                f = open("ErrorLog.txt", "a")
+                f.write("Error logged at " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") +"\n")
+                f.write("Error count since last succesful run is greater than 5, stopping the bot")
+                f.write("\n\n")
+                f.close()
                 return
             
             ErrorProduced  = False
             for QAObj in self.QAObjects:
+                exceptions = []
                 try:
                     self.__Status = QABotState.FindingFiles
                     filesDict = QAObj.FindFiles()
                     self.__Status = QABotState.Idle
                 except Exception as e:
-                    self.ShowError(e,"Find Files",QAObj)
+                    #self.ShowError(e,"Find Files",QAObj)
+                    exceptions.append([ traceback.format_exc(),"Find Files"])
                     ErrorProduced=True
             
                 if filesDict != None:
@@ -105,7 +117,8 @@ class QABot:
                         self.__Status = QABotState.Analysis
                         ResultDict = QAObj.RunAnalysis(filesDict)
                     except Exception as e:
-                        self.ShowError(e,"Run Analysis",QAObj)
+                        #self.ShowError(e,"Run Analysis",QAObj)
+                        exceptions.append([ traceback.format_exc(),"Run Analysis"])
                         ErrorProduced=True
 
                     try:
@@ -114,15 +127,22 @@ class QABot:
                             self.CheckDICOMHasRealName(filesDict)
                         QAObj.ReportData(filesDict,ResultDict)
                     except Exception as e:
-                        self.ShowError(e,"Report Data",QAObj)
+                        #self.ShowError(e,"Report Data",QAObj)
+                        exceptions.append([ traceback.format_exc(),"Report Data"])
                         ErrorProduced=True
 
                     try:
                         self.__Status = QABotState.Cleanup
                         QAObj.CleanUpFiles(filesDict,ResultDict)
                     except Exception as e:
-                        self.ShowError(e,"Clean Up Files",QAObj)
+                        #self.ShowError(e,"Clean Up Files",QAObj)
+                        exceptions.append([ traceback.format_exc(),"Clean Up Files"])
                         ErrorProduced=True
+
+                if len(exceptions) == 1:
+                    self.ShowError(exceptions[0][0],exceptions[0][1],QAObj)
+                elif len(exceptions) > 1:
+                    self.ShowError(exceptions,"Multiple Errors Occured",QAObj)
 
                 self.__Status = QABotState.Idle
                 ErrorFiles = []
@@ -185,21 +205,26 @@ class QABot:
     
     def ShowError(self,e,CustomMessage,QAObj):
         print("         Error: " + CustomMessage)
-        ErrorMessage=e
-        import traceback
-        traceback.print_exc()
-        
-        TEXT=""
-        TEXT+= QAObj.QAName() + " caused an error during processing, the error is displayed below \n\n"
-        TEXT+="Error:\n"
-
-        TEXT+=str(e)+"\n\n"
+        #traceback.print_exc()
+        if type(e) != list:
+            TEXT=""
+            TEXT+= QAObj.QAName() + " caused an error during processing, the error is displayed below \n\n"
+            TEXT+="Error:\n"
+            TEXT+=str(e)+"\n\n"
+            
+        else:
+            TEXT=""
+            for error in e:
+                TEXT+= QAObj.QAName() + " caused an error during " + error[1] + " processing, the error is displayed below \n\n"
+                TEXT+="Error:\n"
+                TEXT+=str(error[0])+"\n\n"
+        print(TEXT)
         subject = QAObj.QAName() +": ERROR"
-
         Path('ErrorLog.txt').touch(exist_ok=True)
         f = open("ErrorLog.txt", "a")
         f.write("Error logged at " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") +"\n")
-        f.write(traceback.format_exc())
+        #f.write(traceback.format_exc())
+        f.write(TEXT)
         f.write("\n\n")
         try:
             QA_Bot_Helper.SendEmail(TEXT,subject)

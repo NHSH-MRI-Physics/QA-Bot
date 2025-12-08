@@ -4,7 +4,6 @@ import DistortionQA_Object
 import MedACRQA_Object
 import shutil
 import os
-
 list_dir = os.listdir(os.path.join(os.getcwd(),"Archive"))
 
 
@@ -21,10 +20,10 @@ DistortionQAObj = DistortionQA_Object.DistortionQAObj()
 MedACRQAObj = MedACRQA_Object.MedACRQAObj()
 
 QABotObj = QABot.QABot()
-QABotObj.IterationTime=10
+QABotObj.IterationTime=1
 QABot.DICOMFolder = "WatchFolder"
-QABot.SendEmails=False
-QABot.UpdateGoogleSheet=True
+QABot.SendEmails=True
+QABot.UpdateGoogleSheet=False
 QABotObj.RegisterQA(DailyQAObj)
 QABotObj.RegisterQA(DistortionQAObj)
 QABotObj.RegisterQA(MedACRQAObj)

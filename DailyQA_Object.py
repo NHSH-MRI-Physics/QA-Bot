@@ -29,6 +29,7 @@ class DailyQAObj(QABot.QAObject):
         FileCount["DQA_Head"] = 19
         FileCount["DQA_Body"] = 50
         FileCount["DQA_Spine"] = 48
+
         SubFolders = [x[0] for x in os.walk(QABot.DICOMFolder)]
         for folder in SubFolders:
             for QAName in FileCount.keys():
@@ -38,32 +39,28 @@ class DailyQAObj(QABot.QAObject):
                         file = glob.glob( os.path.join( folder,"*.dcm"))[0]
                         LoadedDICOM = pydicom.read_file( file )
                         self.scanername =LoadedDICOM[0x08,0x80].value.split(" ")[-2]  + " " + LoadedDICOM[0x08,0x80].value.split(" ")[-1]
+
+
+                        DICOMFiles = glob.glob( os.path.join( folder+"/*.dcm"))
+                        ds = pydicom.read_file( DICOMFiles[0] )
+                        acq_date = ds.get("AcquisitionDate", None)   # Format: YYYYMMDD
+                        acq_time = ds.get("AcquisitionTime", None)   # Format: HHMMSS.frac
+                        self.date = datetime.datetime.strptime(acq_date + acq_time, "%Y%m%d%H%M%S")
+
+                        #This gets overwritten in the report data function, its just to allow us to archive incase it doenst make that far.
+                        #self.date = datetime.datetime.now()
+                        self.ArchiveFolder = "DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S"))
+                        self.ArchiveFolder = self.ArchiveFolder.replace("Users", QAName)
+                        self.ArchiveFolder = os.path.join(QABot.ArchivePath,self.ArchiveFolder)
+
+                        
                         return {"folder":folder , "QAName":QAName}
                 
 
     def RunAnalysis(self, files):
         print("Running: " + files["QAName"])
         Results = DailyQA.RunDailyQA(files["folder"])
-        
-        QAName = files["QAName"]
-
-
-        DICOMFiles = glob.glob( os.path.join( files["folder"]+"/*.dcm"))
-        ds = pydicom.read_file( DICOMFiles[0] )
-        acq_date = ds.get("AcquisitionDate", None)   # Format: YYYYMMDD
-        acq_time = ds.get("AcquisitionTime", None)   # Format: HHMMSS.frac
-        self.date = datetime.datetime.strptime(acq_date + acq_time, "%Y%m%d%H%M%S")
-
         self.QASuccess = True
-
-        #This gets overwritten in the report data function, its just to allow us to archive incase it doenst make that far.
-        #self.date = datetime.datetime.now()
-        self.ArchiveFolder = "DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d %H-%M-%S"))
-        self.ArchiveFolder = self.ArchiveFolder.replace("Users", QAName)
-        self.ArchiveFolder = os.path.join(QABot.ArchivePath,self.ArchiveFolder)
-        
-
-
         return {"Results": Results}        
     
     def ReportData(self, files, ResultDict):
@@ -177,7 +174,6 @@ class DailyQAObj(QABot.QAObject):
         #Archive all the files
         folder = files["folder"]
         QAName = files["QAName"]
-        Results = ResultDict["Results"]
 
         #Move to the archive 
         os.system("echo ilovege | sudo -S chown mri "+folder)
@@ -185,6 +181,7 @@ class DailyQAObj(QABot.QAObject):
         if os.path.exists("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"):
             shutil.move("Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt",os.path.join(self.ArchiveFolder,"Results_DailyQA_"+QAName+"_"+str(self.date.strftime("%Y-%m-%d_%H-%M-%S"))+".txt"))
         if (self.QASuccess==True):
+            Results = ResultDict["Results"]
             for result in Results:
                 if (hasattr(sys, '_MEIPASS')): #if true its being run in pyinstaller
                     shutil.copyfile(os.path.join("_internal","DailyQACode","DailyQA-main","Results",result[-1]+"_SmoothMethod.png"), os.path.join(self.ArchiveFolder,result[-1]+"_SmoothMethod.png"))
