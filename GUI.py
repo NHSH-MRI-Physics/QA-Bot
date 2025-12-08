@@ -55,6 +55,9 @@ def RunQA():
     if DistortionQAVar.get()==1:
         DistortionQAObj = DistortionQA_Object.DistortionQAObj()
         QABotObj.RegisterQA(DistortionQAObj)
+    if medACRQACheck.get()==1:
+        medACRQAObj = DistortionQA_Object.MedACRQAObj()
+        QABotObj.RegisterQA(medACRQAObj)
     
     QABotObj.RunBot()
     QABotThread = None
@@ -161,6 +164,11 @@ DailyQACheck.grid(row=1, column=0,sticky=W,padx=0,pady=0)
 DistortionQAVar = IntVar(value=1)
 DistortionQACheck = ttk.Checkbutton(Modules, text='Distortion QA',variable=DistortionQAVar, onvalue=1, offvalue=0,state=NORMAL,command=None)
 DistortionQACheck.grid(row=2, column=0,sticky=W,padx=0,pady=0)
+#Modules.grid(row=0, column=1,padx=10,pady=7,rowspan=1,sticky=W,columnspan=1)
+
+medACRQAVar = IntVar(value=1)
+medACRQACheck = ttk.Checkbutton(Modules, text='Med ACR QA',variable=DistortionQAVar, onvalue=1, offvalue=0,state=NORMAL,command=None)
+medACRQACheck.grid(row=3, column=0,sticky=W,padx=0,pady=0)
 Modules.grid(row=0, column=1,padx=10,pady=7,rowspan=1,sticky=W,columnspan=1)
 
 Options = ttk.Frame(root)
