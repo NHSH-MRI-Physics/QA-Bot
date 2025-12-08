@@ -7,6 +7,7 @@ import sys
 import QABot
 import DailyQA_Object
 import DistortionQA_Object
+import MedACRQA_Object
 import threading
 from tkinter import StringVar
 from tkinter import filedialog
@@ -55,8 +56,8 @@ def RunQA():
     if DistortionQAVar.get()==1:
         DistortionQAObj = DistortionQA_Object.DistortionQAObj()
         QABotObj.RegisterQA(DistortionQAObj)
-    if medACRQACheck.get()==1:
-        medACRQAObj = DistortionQA_Object.MedACRQAObj()
+    if medACRQAVar.get()==1:
+        medACRQAObj = MedACRQA_Object.MedACRQAObj()
         QABotObj.RegisterQA(medACRQAObj)
     
     QABotObj.RunBot()
@@ -74,11 +75,13 @@ def SetStateOfWidget(state):
     Entry.config(state=state)
     StartQABot.config(state=state)
     DailyQACheck.config(state=state)
+    medACRQACheck.config(state=state)
     DistortionQACheck.config(state=state)
     EnableEmails.config(state=state)
     EnableSheets.config(state=state)
     WatchFolderButton.config(state=state)
     ArchivePathButton.config(state=state)
+
 
 def StartQA():
     global QABotThread
