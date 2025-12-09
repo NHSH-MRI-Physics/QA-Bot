@@ -21,7 +21,7 @@ def SendEmail(TextBody,subject,AttachmentImages=None):
     SuccessfullySentMail = [False]
     t1 = Thread(target=SendTheEmail,daemon=True,args=(TextBody,subject,AttachmentImages,SuccessfullySentMail))
     t1.start()
-    t1.join(10)
+    t1.join(15)
     if SuccessfullySentMail[0] == False:
         print("Email sending is taking too long, terminating thread and continuing")
     
@@ -72,13 +72,11 @@ def UpdateTotalManHours(hours):
     #sh.worksheet("ManHoursLog").update([[CurrentHours+hours]],"A1",)
     t1 = Thread(target=UpdateTotalManHoursThread,daemon=True,args=(hours,UpdateSuccessful))
     t1.start()
-    t1.join(5)
+    t1.join(15)
     if UpdateSuccessful[0] == False:
         print("Updating total man hours is taking too long, terminating thread and continuing.")
 
 def UpdateTotalManHoursThread(hours,UpdateSuccessful=False):
-
-    time.sleep(10)
     CurrentHours = float(GetTotalManHoursSaved())    
     gc = gspread.service_account(filename=QABot.GoogleSheetJSON)
     sh = gc.open(QABot.WorkbookName)
@@ -93,12 +91,12 @@ def UpdateGoogleSheet(Sheet,Values):
     UpdateSuccessful = [False]
     t1 = Thread(target=UpdateGoogleSheetThread,daemon=True,args=(Sheet,Values,UpdateSuccessful))
     t1.start()
-    t1.join(5)
+    t1.join(15)
     if UpdateSuccessful[0] == False:
         print("Updating google sheet results is taking too long, terminating thread and continuing. Data is was not added to the google sheet but can be found in archive")
     
 def UpdateGoogleSheetThread(Sheet,Values,UpdateSuccessful=False):
-    time.sleep(10)
+    
     gc = gspread.service_account(filename=QABot.GoogleSheetJSON)
     sh = gc.open(QABot.WorkbookName)
     values_list = sh.worksheet(Sheet).col_values(1)
