@@ -59,7 +59,10 @@ class MedACRQAObj(QABot.QAObject):
     
 
     def RunAnalysis(self, files):
-        MedACR_ToleranceTableChecker.SetUpToleranceTable("MedACRFrameworkCode/Scottish-Medium-ACR-Analysis-Framework-main/ToleranceTable/ToleranceTable_90mmPeg.xml")
+        if (hasattr(sys, '_MEIPASS')): #if true its being run in pyinstaller
+            MedACR_ToleranceTableChecker.SetUpToleranceTable("ToleranceTable_90mmPeg.xml")
+        else:
+            MedACR_ToleranceTableChecker.SetUpToleranceTable("MedACRFrameworkCode/Scottish-Medium-ACR-Analysis-Framework-main/ToleranceTable/ToleranceTable_90mmPeg.xml")
         
         Path(self.TempResults).mkdir(parents=True, exist_ok=True)
         MedACRAnalysis.GeoMethod=GeometryOptions.MAGNETMETHOD

@@ -280,3 +280,46 @@ TypeError: can only concatenate str (not "NoneType") to str
 
 
 
+Error logged at 2025-12-09 13:46:47
+Medium ACR QA caused an error during Run Analysis processing, the error is displayed below 
+
+Error:
+Traceback (most recent call last):
+  File "QABot.py", line 118, in RunBot
+    ResultDict = QAObj.RunAnalysis(filesDict)
+  File "MedACRQA_Object.py", line 63, in RunAnalysis
+    MedACR_ToleranceTableChecker.SetUpToleranceTable("ToleranceTable_90mmPeg.xml")
+  File "/Users/john/Documents/QA-Bot/PyInstaller/QA Bot/_internal/MedACRFrameworkCode/Scottish-Medium-ACR-Analysis-Framework-main/MedACR_ToleranceTableCheckerV2.py", line 15, in SetUpToleranceTable
+    file = minidom.parse(file)
+  File "xml/dom/minidom.py", line 1990, in parse
+  File "xml/dom/expatbuilder.py", line 910, in parse
+FileNotFoundError: [Errno 2] No such file or directory: 'ToleranceTable_90mmPeg.xml'
+
+
+Medium ACR QA caused an error during Report Data processing, the error is displayed below 
+
+Error:
+Traceback (most recent call last):
+  File "QABot.py", line 128, in RunBot
+    QAObj.ReportData(filesDict,ResultDict)
+  File "MedACRQA_Object.py", line 83, in ReportData
+    for result in ResultDict["Results"]:
+TypeError: 'NoneType' object is not subscriptable
+
+
+Medium ACR QA caused an error during Clean Up Files processing, the error is displayed below 
+
+Error:
+Traceback (most recent call last):
+  File "QABot.py", line 136, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "MedACRQA_Object.py", line 199, in CleanUpFiles
+    Path(self.ArchiveFolder).mkdir(parents=True, exist_ok=True)
+  File "pathlib.py", line 960, in __new__
+  File "pathlib.py", line 594, in _from_parts
+  File "pathlib.py", line 578, in _parse_args
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+
+
+
+
