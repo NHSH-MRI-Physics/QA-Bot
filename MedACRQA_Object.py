@@ -27,6 +27,7 @@ class MedACRQAObj(QABot.QAObject):
         self.TempResults = os.path.join("MedACRFrameworkCode","Scottish-Medium-ACR-Analysis-Framework-main","TempResults")
         self.scannerName = None
         self.ArchiveFolder = None
+        self.SuccessfulRun = False
 
     def FindFiles(self):
         SubFolders = [x[0] for x in os.walk(QABot.DICOMFolder)]
@@ -55,6 +56,8 @@ class MedACRQAObj(QABot.QAObject):
                     self.scannerName = "MRI1"
                 else:
                     self.scannerName = "MRI2"
+
+                self.ArchiveFolder = os.path.join(QABot.ArchivePath,"MedACRQA_"+self.scannerName+"_"+self.AcqDate.strftime("%Y-%m-%d %H-%M-%S"))
                 return {"folder": folder}
     
 
@@ -71,9 +74,13 @@ class MedACRQAObj(QABot.QAObject):
 
         Results=[]
         for sequence in self.Sequences:
+            print("Running Sequence: " + sequence)
             MedACRAnalysis.RunAnalysis(sequence,files["folder"],self.TempResults,RunAll=True, RunSNR=True, RunGeoAcc=True, RunSpatialRes=True, RunUniformity=True, RunGhosting=True, RunSlicePos=True, RunSliceThickness=True)
             ResultsText = MedACRAnalysis.ReportText
             Results.append(ResultsText)
+
+        self.SuccessfulRun = True
+        print(self.SuccessfulRun)
         return {"Results": Results}
     
     def ReportData(self, files, ResultDict):
@@ -81,11 +88,14 @@ class MedACRQAObj(QABot.QAObject):
         import fnmatch
         images = [os.path.join(dirpath, f) for dirpath, dirnames, files in os.walk(self.TempResults) for f in fnmatch.filter(files, '*.png')] #EMail attachment need names
 
+        if ResultDict == None: #If the processing fails dont report anything 
+            return None
+
         TEXT = ""
         for result in ResultDict["Results"]:
             TEXT += result + "\n\n-------------------------------------------------------------------------------------------------------------\n\n"
         subject = "QABot: Medium ACR QA Results for " + self.scannerName + " on " + self.AcqDate.strftime("%Y-%m-%d %H:%M:%S")
-        self.ArchiveFolder = os.path.join(QABot.ArchivePath,"MedACRQA_"+self.scannerName+"_"+self.AcqDate.strftime("%Y-%m-%d %H-%M-%S"))
+        #self.ArchiveFolder = os.path.join(QABot.ArchivePath,"MedACRQA_"+self.scannerName+"_"+self.AcqDate.strftime("%Y-%m-%d %H-%M-%S"))
         TEXT+= "Archive Folder: "+self.ArchiveFolder + "\n"
         QA_Bot_Helper.UpdateTotalManHours(5)
         QA_Bot_Helper.SendEmail(TEXT,subject,images)
@@ -200,10 +210,11 @@ class MedACRQAObj(QABot.QAObject):
     def CleanUpFiles(self, files, ResultDict):
         Path(self.ArchiveFolder).mkdir(parents=True, exist_ok=True)
 
-        for item in os.listdir(self.TempResults):
-            src = os.path.join(self.TempResults, item)
-            dst = os.path.join(self.ArchiveFolder, item)
-            shutil.move(src, dst)
+        if self.SuccessfulRun == True:#Only move the results if the test was successful.
+            for item in os.listdir(self.TempResults):
+                src = os.path.join(self.TempResults, item)
+                dst = os.path.join(self.ArchiveFolder, item)
+                shutil.move(src, dst)
 
         shutil.rmtree(self.TempResults)
 

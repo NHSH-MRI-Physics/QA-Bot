@@ -22,7 +22,7 @@ MedACRQAObj = MedACRQA_Object.MedACRQAObj()
 QABotObj = QABot.QABot()
 QABotObj.IterationTime=1
 QABot.DICOMFolder = "WatchFolder"
-QABot.SendEmails=True
+QABot.SendEmails=False  
 QABot.UpdateGoogleSheet=False
 QABotObj.RegisterQA(DailyQAObj)
 QABotObj.RegisterQA(DistortionQAObj)
