@@ -102,110 +102,112 @@ class MedACRQAObj(QABot.QAObject):
 
         docx_files = [str(p) for p in Path(self.TempResults).rglob('*.docx')]
         newest_docx = max(docx_files, key=lambda p: os.path.getmtime(p))
-        with open(newest_docx, 'rb') as f:
-            data = pickle.load(f)
+        #with open(newest_docx, 'rb') as f:
+        for doc in docx_files:
+            with open(newest_docx, 'rb') as f:
+                data = pickle.load(f)
 
-        Row = []
-        Row.append(data["date_scanned"].strftime("%d-%m-%Y %H:%M:%S"))
-        Row.append(data["data_analysed"].strftime("%d-%m-%Y %H:%M:%S"))
-        Row.append(data["ScannerDetails"]["Manufacturer"])
-        Row.append(data["ScannerDetails"]["Institution Name"])
-        Row.append(data["ScannerDetails"]["Model Name"])
-        Row.append(data["ScannerDetails"]["Serial Number"])
-        Row.append(data["Sequence"])
-        Row.append(data["DICOM"][0].MagneticFieldStrength)
-        
-        #SNR
-        if (type(data["Test"]["SNR"]) != MedACRModules.Empty_Module.EmptyModule):
-            Row.append(data["Test"]["SNR"].results["measurement"]["snr by smoothing"]["measured"])
-            Row.append(data["Test"]["SNR"].results["measurement"]["snr by smoothing"]["normalised"])
-        else:
-            Row.append("Not Run")
-            Row.append("Not Run")
+                Row = []
+                Row.append(data["date_scanned"].strftime("%d-%m-%Y %H:%M:%S"))
+                Row.append(data["data_analysed"].strftime("%d-%m-%Y %H:%M:%S"))
+                Row.append(data["ScannerDetails"]["Manufacturer"])
+                Row.append(data["ScannerDetails"]["Institution Name"])
+                Row.append(data["ScannerDetails"]["Model Name"])
+                Row.append(data["ScannerDetails"]["Serial Number"])
+                Row.append(data["Sequence"])
+                Row.append(data["DICOM"][0].MagneticFieldStrength)
+                
+                #SNR
+                if (type(data["Test"]["SNR"]) != MedACRModules.Empty_Module.EmptyModule):
+                    Row.append(data["Test"]["SNR"].results["measurement"]["snr by smoothing"]["measured"])
+                    Row.append(data["Test"]["SNR"].results["measurement"]["snr by smoothing"]["normalised"])
+                else:
+                    Row.append("Not Run")
+                    Row.append("Not Run")
 
-        #GeoDist
-        ExpectedSize = (data["ToleranceTable"]["Geometric Accuracy"]["MagNetMethod"].max + data["ToleranceTable"]["Geometric Accuracy"]["MagNetMethod"].min)/2.0
-        if ExpectedSize != 85.0 or ExpectedSize != 80.0:
-            ValueError("Warning", "The expected size for Geometric Distortion is not the standard 85mm or 80mm. Please check your tolerance table.")
+                #GeoDist
+                ExpectedSize = (data["ToleranceTable"]["Geometric Accuracy"]["MagNetMethod"].max + data["ToleranceTable"]["Geometric Accuracy"]["MagNetMethod"].min)/2.0
+                if ExpectedSize != 85.0 or ExpectedSize != 80.0:
+                    ValueError("Warning", "The expected size for Geometric Distortion is not the standard 85mm or 80mm. Please check your tolerance table.")
 
-        if (type(data["Test"]["GeoDist"]) != MedACRModules.Empty_Module.EmptyModule):
-            #This needs tested
-            HorDist = [0,0,0]
-            HorDist[0] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["horizontal distances mm"][0]-ExpectedSize
-            HorDist[1] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["horizontal distances mm"][1]-ExpectedSize
-            HorDist[2] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["horizontal distances mm"][2]-ExpectedSize
-            VertDist = [0,0,0]
-            VertDist[0] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["vertical distances mm"][0]-ExpectedSize
-            VertDist[1] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["vertical distances mm"][1]-ExpectedSize
-            VertDist[2] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["vertical distances mm"][2]-ExpectedSize
+                if (type(data["Test"]["GeoDist"]) != MedACRModules.Empty_Module.EmptyModule):
+                    #This needs tested
+                    HorDist = [0,0,0]
+                    HorDist[0] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["horizontal distances mm"][0]-ExpectedSize
+                    HorDist[1] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["horizontal distances mm"][1]-ExpectedSize
+                    HorDist[2] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["horizontal distances mm"][2]-ExpectedSize
+                    VertDist = [0,0,0]
+                    VertDist[0] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["vertical distances mm"][0]-ExpectedSize
+                    VertDist[1] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["vertical distances mm"][1]-ExpectedSize
+                    VertDist[2] = data["Test"]["GeoDist"].results["measurement"]["distortion"]["vertical distances mm"][2]-ExpectedSize
 
-            Row.append(HorDist[0])
-            Row.append(HorDist[1])
-            Row.append(HorDist[2])
-            Row.append(VertDist[0])
-            Row.append(VertDist[1])
-            Row.append(VertDist[2])
-        else:
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
+                    Row.append(HorDist[0])
+                    Row.append(HorDist[1])
+                    Row.append(HorDist[2])
+                    Row.append(VertDist[0])
+                    Row.append(VertDist[1])
+                    Row.append(VertDist[2])
+                else:
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
 
-        #Uniformity
-        if (type(data["Test"]["Uniformity"]) != MedACRModules.Empty_Module.EmptyModule):
-            Row.append(data["Test"]["Uniformity"].results["measurement"]["integral uniformity %"])
-        else:
-            Row.append("Not Run")
+                #Uniformity
+                if (type(data["Test"]["Uniformity"]) != MedACRModules.Empty_Module.EmptyModule):
+                    Row.append(data["Test"]["Uniformity"].results["measurement"]["integral uniformity %"])
+                else:
+                    Row.append("Not Run")
 
-        #Ghosting
-        if (type(data["Test"]["Ghosting"]) != MedACRModules.Empty_Module.EmptyModule):
-            Row.append(data["Test"]["Ghosting"].results["measurement"]["signal ghosting %"])
-        else:
-            Row.append("Not Run")
+                #Ghosting
+                if (type(data["Test"]["Ghosting"]) != MedACRModules.Empty_Module.EmptyModule):
+                    Row.append(data["Test"]["Ghosting"].results["measurement"]["signal ghosting %"])
+                else:
+                    Row.append("Not Run")
 
-        #Slice Pos
-        if (type(data["Test"]["SlicePos"]) != MedACRModules.Empty_Module.EmptyModule):
-            Row.append(data["Test"]["SlicePos"].results['measurement'][data["Test"]["SlicePos"].results['file'][0]]['length difference'])
-            Row.append(data["Test"]["SlicePos"].results['measurement'][data["Test"]["SlicePos"].results['file'][1]]['length difference'])
-        else:
-            Row.append("Not Run")
-            Row.append("Not Run")
+                #Slice Pos
+                if (type(data["Test"]["SlicePos"]) != MedACRModules.Empty_Module.EmptyModule):
+                    Row.append(data["Test"]["SlicePos"].results['measurement'][data["Test"]["SlicePos"].results['file'][0]]['length difference'])
+                    Row.append(data["Test"]["SlicePos"].results['measurement'][data["Test"]["SlicePos"].results['file'][1]]['length difference'])
+                else:
+                    Row.append("Not Run")
+                    Row.append("Not Run")
 
-        #Slice Thickness
-        if (type(data["Test"]["SliceThickness"]) != MedACRModules.Empty_Module.EmptyModule):
-            Row.append(data["Test"]["SliceThickness"].results["measurement"]["slice width mm"])
-        else:
-            Row.append("Not Run")
+                #Slice Thickness
+                if (type(data["Test"]["SliceThickness"]) != MedACRModules.Empty_Module.EmptyModule):
+                    Row.append(data["Test"]["SliceThickness"].results["measurement"]["slice width mm"])
+                else:
+                    Row.append("Not Run")
 
-        #Spatial Res
-        if (type(data["Test"]["SpatialRes"]) != MedACRModules.Empty_Module.EmptyModule):
-            Row.append(str(data["Test"]["SpatialRes"].settings["SpatialResMethod"]))
-            Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["1.1mm holes Horizontal"]))
-            Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["1.0mm holes Horizontal"]))
-            Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["0.9mm holes Horizontal"]))
-            Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["0.8mm holes Horizontal"]))
-            Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["1.1mm holes Vertical"]))
-            Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["1.0mm holes Vertical"]))
-            Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["0.9mm holes Vertical"]))
-            Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["0.8mm holes Vertical"]))
-        else:
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
-            Row.append("Not Run")
+                #Spatial Res
+                if (type(data["Test"]["SpatialRes"]) != MedACRModules.Empty_Module.EmptyModule):
+                    Row.append(str(data["Test"]["SpatialRes"].settings["SpatialResMethod"]))
+                    Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["1.1mm holes Horizontal"]))
+                    Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["1.0mm holes Horizontal"]))
+                    Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["0.9mm holes Horizontal"]))
+                    Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["0.8mm holes Horizontal"]))
+                    Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["1.1mm holes Vertical"]))
+                    Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["1.0mm holes Vertical"]))
+                    Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["0.9mm holes Vertical"]))
+                    Row.append(str(data["Test"]["SpatialRes"].results["measurement"]["0.8mm holes Vertical"]))
+                else:
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
+                    Row.append("Not Run")
 
-        for entry in Row:
-            if type(entry) != str:
-                Row[Row.index(entry)] = str(round(entry,2))
-        
-        QA_Bot_Helper.UpdateGoogleSheet("MedACRQA",Row)
+                for entry in Row:
+                    if type(entry) != str:
+                        Row[Row.index(entry)] = str(round(entry,2))
+                
+                QA_Bot_Helper.UpdateGoogleSheet("MedACRQA",Row)
 
     def CleanUpFiles(self, files, ResultDict):
         Path(self.ArchiveFolder).mkdir(parents=True, exist_ok=True)
