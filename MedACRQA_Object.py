@@ -104,7 +104,7 @@ class MedACRQAObj(QABot.QAObject):
         newest_docx = max(docx_files, key=lambda p: os.path.getmtime(p))
         #with open(newest_docx, 'rb') as f:
         for doc in docx_files:
-            with open(newest_docx, 'rb') as f:
+            with open(doc, 'rb') as f:
                 data = pickle.load(f)
 
                 Row = []

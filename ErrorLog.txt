@@ -31,3 +31,32 @@ Exception: Unable to find 3 regions in binary image, try the manual option
 
 
 
+Error logged at 2026-01-08 20:05:45
+Medium ACR QA caused an error during processing, the error is displayed below 
+
+Error:
+Traceback (most recent call last):
+  File "/Users/mri/opt/miniconda3/envs/QABot/lib/python3.10/shutil.py", line 816, in move
+    os.rename(src, real_dst)
+PermissionError: [Errno 13] Permission denied: 'MedACRFrameworkCode/Scottish-Medium-ACR-Analysis-Framework-main/TempResults/ACRSNR' -> '/Users/mri/Desktop/QA/Archive/MedACRQA_MRI1_2026-01-08 19-29-17/ACRSNR/ACRSNR'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mri/Documents/QA-Bot/QABot.py", line 136, in RunBot
+    QAObj.CleanUpFiles(filesDict,ResultDict)
+  File "/Users/mri/Documents/QA-Bot/MedACRQA_Object.py", line 219, in CleanUpFiles
+    shutil.move(src, dst)
+  File "/Users/mri/opt/miniconda3/envs/QABot/lib/python3.10/shutil.py", line 832, in move
+    copytree(src, real_dst, copy_function=copy_function,
+  File "/Users/mri/opt/miniconda3/envs/QABot/lib/python3.10/shutil.py", line 559, in copytree
+    return _copytree(entries=entries, src=src, dst=dst, symlinks=symlinks,
+  File "/Users/mri/opt/miniconda3/envs/QABot/lib/python3.10/shutil.py", line 457, in _copytree
+    os.makedirs(dst, exist_ok=dirs_exist_ok)
+  File "/Users/mri/opt/miniconda3/envs/QABot/lib/python3.10/os.py", line 225, in makedirs
+    mkdir(name, mode)
+PermissionError: [Errno 13] Permission denied: '/Users/mri/Desktop/QA/Archive/MedACRQA_MRI1_2026-01-08 19-29-17/ACRSNR/ACRSNR'
+
+
+
+
