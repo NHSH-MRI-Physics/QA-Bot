@@ -21,7 +21,7 @@ def SendEmail(TextBody,subject,AttachmentImages=None):
     SuccessfullySentMail = [False]
     t1 = Thread(target=SendTheEmail,daemon=True,args=(TextBody,subject,AttachmentImages,SuccessfullySentMail))
     t1.start()
-    t1.join(15)
+    t1.join(60)
     if SuccessfullySentMail[0] == False:
         print("Email sending is taking too long, terminating thread and continuing")
     
